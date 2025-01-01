@@ -15,12 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 # myproject/urls.py
+# myproject/urls.py
 from django.contrib import admin
 from django.urls import path
-from EldenRingInsider import views  # Import your views
+from EldenRingInsider import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  # Map the custom view to the root URL
+    path('', views.home, name='home'),  # This will map the root path (/) to the home view
+    path('items/', views.item_list, name='item_list'),
 ]
+
 
