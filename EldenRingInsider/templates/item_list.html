@@ -27,39 +27,57 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             position: relative;
-        }
-        li:hover .tooltip {
-            display: block;
+            cursor: help;
         }
         .tooltip {
-            display: none;
-            position: absolute;
-            left: 105%;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #333;
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
             color: #fff;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        li:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .item-type {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #444;
         }
     </style>
 </head>
 <body>
     <h1>Items in Elden Ring</h1>
     <div class="item-container">
-        <ul>
-            {% for item in items %}
-            <li>
-                <strong>{{ item.name }}</strong> - {{ item.item_type }}
-                <span class="tooltip">{{ item.description }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+        {% for item_type, items in grouped_items.items %}
+            <h2 class="item-type">{{ item_type }}</h2>
+            <ul>
+                {% for item in items %}
+                <li>
+                    <strong>{{ item.name }}</strong>
+                    <span class="tooltip">{{ item.description }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
     </div>
 </body>
 </html>
+
+
+
+
 
 
 
