@@ -22,8 +22,9 @@ from EldenRingInsider import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  # This will map the root path (/) to the home view
-    path('items/', views.item_list, name='item_list'),
+    path('', views.item_list, name='item_list'),  # Root path for the item list
 ]
+
+
 
 

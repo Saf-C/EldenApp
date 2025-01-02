@@ -1,0 +1,71 @@
+<!-- EldenRingInsider/templates/item_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elden Ring Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .item-container {
+            display: flex;
+            flex-direction: column;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            position: relative;
+        }
+        li:hover .tooltip {
+            display: block;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            left: 105%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Items in Elden Ring</h1>
+    <div class="item-container">
+        <ul>
+            {% for item in items %}
+            <li>
+                <strong>{{ item.name }}</strong> - {{ item.item_type }}
+                <span class="tooltip">{{ item.description }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
