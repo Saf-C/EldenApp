@@ -1,91 +1,184 @@
 <!-- EldenRingInsider/templates/item_list.html -->
 <!DOCTYPE html>
-<html>
-<nav class="navbar">
-    <div class="logo">EldenRingInsider</div>
-    <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Katanas</a></li>
-        <li><a href="#">Swords</a></li>
-        <li><a href="#">Staffs</a></li>
-        <li><a href="#">Ash Of Wars</a></li>
-        <li><a href="#">Spells</a></li>
-        <li><a href="#">Guides</a></li>
-    </ul>
-    <input type="text" placeholder="Search items..." class="search-bar">
-</nav>
-
+<html lang="en">
 <head>
-    <title>Elden Ring Items</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elden Ring Insider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* General Styling */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            color: #f4f4f9;
         }
-        h1 {
-            color: #333;
+        h1, h2 {
+            color: #ffd700;
+            text-align: center;
         }
-        .item-container {
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navigation Bar */
+        .navbar {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #2b2b3b;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        ul {
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .nav-links {
             list-style-type: none;
+            display: flex;
+            gap: 15px;
+            margin: 0;
             padding: 0;
         }
-        li {
-            margin: 5px 0;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .nav-links li {
             position: relative;
-            cursor: help;
         }
-        .tooltip {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
+        .nav-links li a {
+            color: #f4f4f9;
+            font-size: 1em;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-links li a:hover {
+            background-color: #ffd700;
+            color: #1e1e2e;
+        }
+        .search-bar {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 1em;
+        }
+
+        /* Hero Section */
+        .hero {
             text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, #1e1e2e, #2b2b3b);
         }
-        li:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
         }
-        .item-type {
+        .hero p {
             font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #444;
+            margin-bottom: 20px;
+        }
+        .hero .cta {
+            background-color: #ffd700;
+            color: #1e1e2e;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .hero .cta:hover {
+            background-color: #e5c100;
+        }
+
+        /* Item Container */
+        .item-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: #2b2b3b;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #ffd700;
+        }
+        .card p {
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        .card .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #ffd700;
+            color: #1e1e2e;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .card .btn:hover {
+            background-color: #e5c100;
         }
     </style>
 </head>
 <body>
-    <h1>Items in Elden Ring</h1>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">EldenRingInsider</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Katanas</a></li>
+            <li><a href="#">Swords</a></li>
+            <li><a href="#">Staffs</a></li>
+            <li><a href="#">Ash Of Wars</a></li>
+            <li><a href="#">Spells</a></li>
+            <li><a href="#">Guides</a></li>
+        </ul>
+        <input type="text" placeholder="Search items..." class="search-bar">
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome to Elden Ring Insider</h1>
+        <p>Your ultimate resource for Elden Ring weapons, spells, and more.</p>
+        <button class="cta">Explore Items</button>
+    </section>
+
+    <!-- Item Container -->
     <div class="item-container">
         {% for item_type, items in grouped_items.items %}
-            <h2 class="item-type">{{ item_type }}</h2>
-            <ul>
-                {% for item in items %}
-                <li>
-                    <strong>{{ item.name }}</strong>
-                    <span class="tooltip">{{ item.description }}</span>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="card">
+                <h3>{{ item_type }}</h3>
+                <img src="placeholder.jpg" alt="{{ item_type }}">
+                <p>{{ items|join:", " }}</p>
+                <a href="#" class="btn">View Details</a>
+            </div>
         {% endfor %}
     </div>
+
 </body>
 </html>
 
