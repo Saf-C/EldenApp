@@ -19,9 +19,6 @@ def item_list(request):
     else:
         items = Item.objects.all()
 
-    # Fetch all items from the database
-    items = Item.objects.all()
-
     # Group items by their type
     grouped_items = {}
     for item in items:
@@ -30,7 +27,7 @@ def item_list(request):
         grouped_items[item.type].append(item)
 
     # Pass the grouped items to the template
-    return render(request, 'item_list.html', {'grouped_items': grouped_items})
+    return render(request, 'item_list.html', {'grouped_items': grouped_items, 'items' : items, 'query' : query})
 
 
 
