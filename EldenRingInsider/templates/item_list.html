@@ -160,7 +160,17 @@
         <li><a href="#">Spells</a></li>
         <li><a href="#">Guides</a></li>
     </ul>
-    <input type="text" placeholder="Search items..." class="search-bar">
+    <!--<input type="text" placeholder="Search items..." class="search-bar"> -->
+      <form method="get" action="{% url 'item_list' %}">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search items..."
+            class="search-bar"
+            value="{{ query|default:'' }}"
+        >
+        <button type="submit" style="display:none;">Search</button>
+    </form>
 </nav>
 
 <!-- Hero Section -->

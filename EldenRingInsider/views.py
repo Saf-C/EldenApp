@@ -10,6 +10,15 @@ from .models import Item
 from itertools import groupby
 
 def item_list(request):
+    # Get the search query from the request
+    query = request.GET.get('q', '')
+
+    # Fetch items based on the search query or all items if no query is provided
+    if query:
+        items = Item.objects.filter(name__icontains=query)
+    else:
+        items = Item.objects.all()
+
     # Fetch all items from the database
     items = Item.objects.all()
 
