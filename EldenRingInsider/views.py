@@ -7,15 +7,20 @@ from django.shortcuts import render
 # EldenRingInsider/views.py
 from django.shortcuts import render
 from .models import Item
+from django.db.models import Q  # Import Q for complex queries
 from itertools import groupby
 
 def item_list(request):
     # Get the search query from the request
     query = request.GET.get('q', '')
 
-    # Fetch items based on the search query or all items if no query is provided
+    # Filter items based on the query or get all items if no query is provided
     if query:
-        items = Item.objects.filter(name__icontains=query)
+        items = Item.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(type__icontains=query)
+        )
     else:
         items = Item.objects.all()
 
