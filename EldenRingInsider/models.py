@@ -9,6 +9,8 @@ class Item(models.Model):
     description = models.TextField()
     image_url = models.CharField(max_length=255, default='/static/placeholder.jpg')
     type = models.CharField(max_length=50)
+    #image = models.URLField()  # Uploaded images go to "media/item_images/"
+
 
     def __str__(self):
         return self.name
