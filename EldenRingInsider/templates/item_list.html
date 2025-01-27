@@ -188,8 +188,8 @@
             {% for item in items %}
                 <div class="card">
                     <h3>{{ item.name }}</h3>
-                    <img src="{{ item.image_url }}" alt="{{ item.name }}">
-                    <p>{{ item.description }}</p>
+                    <img src="{{ item.image_url }}">
+                    <!-- Description Removed -->
                     <a href="{% url 'item_detail' item.id %}" class="btn">View Details</a>
                 </div>
             {% endfor %}
