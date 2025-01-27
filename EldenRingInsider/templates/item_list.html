@@ -190,7 +190,7 @@
                     <h3>{{ item.name }}</h3>
                     <img src="{{ item.image_url }}" alt="{{ item.name }}">
                     <p>{{ item.description }}</p>
-                    <a href="#" class="btn">View Details</a>
+                    <a href="{% url 'item_detail' item.id %}" class="btn">View Details</a>
                 </div>
             {% endfor %}
         </div>

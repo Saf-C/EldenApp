@@ -9,8 +9,11 @@ from django.shortcuts import render
 from .models import Item
 from django.db.models import Q  # Import Q for complex queries
 from itertools import groupby
+from django.shortcuts import render, get_object_or_404
+
 
 def item_list(request):
+
     # Get the search query from the request
     query = request.GET.get('q', '')
 
@@ -35,7 +38,10 @@ def item_list(request):
     return render(request, 'item_list.html', {'grouped_items': grouped_items, 'items' : items, 'query' : query})
 
 
-
+def item_detail(request, item_id):
+    # Get the specific item or return a 404 if not found
+    item = get_object_or_404(Item, id=item_id)
+    return render(request, 'item_detail.html', {'item': item})
 
 
 

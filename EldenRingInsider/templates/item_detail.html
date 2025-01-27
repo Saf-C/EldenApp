@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.name }} - EldenRingInsider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #2b2b3b;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ffd700;
+            text-align: center;
+        }
+        .item-details img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .item-details p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        .back-link a:hover {
+            color: #e5c100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ item.name }}</h1>
+        <div class="item-details">
+            <img src="{{ item.image_url }}" alt="{{ item.name }}">
+            <p><strong>Description:</strong> {{ item.description }}</p>
+            <p><strong>Type:</strong> {{ item.type }}</p>
+        </div>
+        <div class="back-link">
+            <a href="{% url 'item_list' %}">&larr; Back to Items</a>
+        </div>
+    </div>
+</body>
+</html>
