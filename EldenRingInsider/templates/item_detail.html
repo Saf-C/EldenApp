@@ -55,8 +55,9 @@
         <h1>{{ item.name }}</h1>
         <div class="item-details">
             <img src="{{ item.image_url }}" alt="{{ item.name }}">
-            <p><strong>Description:</strong> {{ item.description }}</p>
             <p><strong>Type:</strong> {{ item.type }}</p>
+            <p><strong>Description:</strong> {{ item.description }}</p>
+
         </div>
         <div class="back-link">
             <a href="{% url 'item_list' %}">&larr; Back to Items</a>
