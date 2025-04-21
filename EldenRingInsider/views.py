@@ -43,6 +43,9 @@ def item_detail(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return render(request, 'item_detail.html', {'item': item})
 
+def builds_list(request):
+    return render(request, 'builds.html')
+
 
 
 
