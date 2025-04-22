@@ -138,3 +138,42 @@
         .card .btn:hover {
             background-color: #e5c100;
         }
+
+
+
+
+        .build-card {
+            margin: 30px auto;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            width: 80%;
+            color: white;
+        }
+
+        .item-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #2a2a2a;
+            padding: 5px;
+            border-radius: 3px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .item-img {
+           width: 100px;
+           height: 100px;
+           object-fit: contain;
+           margin-top: 8px;
+           transition: transform 0.3s;
+        }
+
+        .item-img:hover {
+           transform: scale(1.2);
+        }

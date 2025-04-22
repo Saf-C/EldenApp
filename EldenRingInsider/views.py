@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 
 # Create your views here.
 
@@ -10,6 +10,7 @@ from .models import Item
 from django.db.models import Q  # Import Q for complex queries
 from itertools import groupby
 from django.shortcuts import render, get_object_or_404
+from .models import Build
 
 
 def item_list(request):
@@ -43,8 +44,13 @@ def item_detail(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return render(request, 'item_detail.html', {'item': item})
 
-def builds_list(request):
-    return render(request, 'builds.html')
+#def builds_list(request):
+    #return render(request, 'builds.html')
+
+
+def builds_view(request):
+    builds = Build.objects.prefetch_related('equipment_slots__item').all()
+    return render(request, 'builds.html', {'builds': builds})
 
 
 

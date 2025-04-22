@@ -17,72 +17,30 @@
  <h1>Build Guides</h1>
     <p style="text-align: center;">Optimised setups based on real game meta and stat scaling.</p>
 
-    <div class="item-container">
-    <div class="card">
-        <h3>Strength Build</h3>
-        <p>Recommended for colossal weapon users. High poise, massive damage.</p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-    <div class="card">
-        <h3>Dexterity Build</h3>
-        <p>Fast weapons, quick rolling. Ideal for PvP and katanas.</p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-    <div class="card">
-        <h3>Intelligence Build</h3>
-        <p>Focus on sorceries and high-range magic combat.</p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-        <div class="card">
-        <h3>Arcane Build</h3>
-        <p>Focus </p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-        <div class="card">
-        <h3>Faith Build</h3>
-        <p>Focus </p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-         <div class="card">
-        <h3>Vigor Build</h3>
-        <p>Focus </p>
-        <a href="#" class="btn">View Build</a>
-    </div>
-        <div class="card">
-        <h3>Endurance Build</h3>
-        <p>Focus </p>
-        <a href="#" class="btn">View Build</a>
-    </div>
+ {% if builds %}
+    {% for build in builds %}
+        <div class="build-card">
+            <h2>{{ build.name }}</h2>
+            <p>{{ build.description }}</p>
 
-    </div>
-
-<div class="equipment-grid">
-    <h2>Equipment</h2>
-    <div class="slot-grid">
-        <!-- Weapons -->
-        <div class="slot">RH1</div>
-        <div class="slot">RH2</div>
-        <div class="slot">LH1</div>
-        <div class="slot">LH2</div>
-
-        <!-- Armor -->
-        <div class="slot">Helm</div>
-        <div class="slot">Armor</div>
-        <div class="slot">Gauntlets</div>
-        <div class="slot">Boots</div>
-
-        <!-- Talismans -->
-        <div class="slot">Talisman 1</div>
-        <div class="slot">Talisman 2</div>
-        <div class="slot">Talisman 3</div>
-        <div class="slot">Talisman 4</div>
-
-        <!-- Flasks -->
-        <div class="slot">Flask 1</div>
-        <div class="slot">Flask 2</div>
-        <div class="slot">Flask 3</div>
-    </div>
-</div>
+            <div class="item-container">
+                {% for slot in build.equipment_slots.all %}
+                    <div class="card">
+                        <strong>{{ slot.get_slot_name_display }}</strong><br>
+                        {% if slot.item %}
+                            <img src="{{ slot.item.image_url }}" alt="{{ slot.item.name }}" class="item-img">
+                            <p>{{ slot.item.name }}</p>
+                        {% else %}
+                            <p>Empty Slot</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p style="text-align:center;">No builds found.</p>
+{% endif %}
 
 </body>
 </html>
