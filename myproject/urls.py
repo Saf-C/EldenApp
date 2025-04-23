@@ -26,8 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.item_list, name='item_list'),  # Root path for the item list
     path('item/<int:item_id>/', views.item_detail, name='item_detail'),
-    #path('builds/', views.builds_list, name='builds_list'),
     path('builds/', views.builds_view, name='builds'),
+    path('items/<int:item_id>/json/', views.item_json_view, name='item_json'), # For preview items on builds
+
 ]
 
 

@@ -10,8 +10,41 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 
-
 </head>
+
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="logo">EldenRingInsider</div>
+    <ul class="nav-links">
+        <li><a href="{% url 'item_list' %}">Home</a></li>
+        <li><a href="#">Katanas</a></li>
+        <li><a href="#">Swords</a></li>
+        <li><a href="#">Staffs</a></li>
+        <li><a href="#">Ash of Wars</a></li>
+        <li><a href="#">Spells</a></li>
+        <li><a href="{% url 'builds' %}">Builds</a></li>
+
+
+    </ul>
+    <!--<input type="text" placeholder="Search builds..." class="search-bar"> -->
+      <form method="get" action="{% url 'builds' %}">
+    <input
+        type="text"
+        name="q"
+        placeholder="Search builds..."
+        class="search-bar"
+        value="{{ query|default:'' }}"
+    >
+    <button type="submit" style="display:none;">Search</button>
+</form>
+</nav>
+
+
+
+
+
+
+
 <body>
 
  <h1>Build Guides</h1>
@@ -28,7 +61,20 @@
                     <div class="card">
                         <strong>{{ slot.get_slot_name_display }}</strong><br>
                         {% if slot.item %}
-                            <img src="{{ slot.item.image_url }}" alt="{{ slot.item.name }}" class="item-img">
+                            <div class="tooltip">
+                                    <a href="{% url 'item_detail' slot.item.id %}">
+                                        <img
+                                            src="{{ slot.item.image_url }}"
+                                            alt="{{ slot.item.name }}"
+                                            class="item-img cursor-pointer"
+                                        />
+                                    </a>
+                                    <span class="tooltiptext">
+                                        <strong>{{ slot.item.name }}</strong><br>
+                                        {{ slot.item.description|truncatechars:60 }}
+                                    </span>
+                                </div>
+
                             <p>{{ slot.item.name }}</p>
                         {% else %}
                             <p>Empty Slot</p>
@@ -41,6 +87,12 @@
 {% else %}
     <p style="text-align:center;">No builds found.</p>
 {% endif %}
+
+
+
+
+
+
 
 </body>
 </html>

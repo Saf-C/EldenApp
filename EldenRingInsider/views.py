@@ -11,6 +11,7 @@ from django.db.models import Q  # Import Q for complex queries
 from itertools import groupby
 from django.shortcuts import render, get_object_or_404
 from .models import Build
+from django.http import JsonResponse
 
 
 def item_list(request):
@@ -44,13 +45,27 @@ def item_detail(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return render(request, 'item_detail.html', {'item': item})
 
-#def builds_list(request):
-    #return render(request, 'builds.html')
-
 
 def builds_view(request):
-    builds = Build.objects.prefetch_related('equipment_slots__item').all()
-    return render(request, 'builds.html', {'builds': builds})
+    query = request.GET.get('q', '')
+    builds = Build.objects.prefetch_related('equipment_slots__item')
+
+    if query:
+        builds = builds.filter(name__icontains=query)
+
+    return render(request, 'builds.html', {'builds': builds, 'query': query})
+
+
+
+
+def item_json_view(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    return JsonResponse({
+        'name': item.name,
+        'description': item.description,
+        'image_url': item.image_url,
+    })
+
 
 
 

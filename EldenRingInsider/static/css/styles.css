@@ -177,3 +177,52 @@
         .item-img:hover {
            transform: scale(1.2);
         }
+
+
+
+
+        /* Modal & Img for Builds */
+        #itemModal img {
+            max-width: 100%;
+            max-height: 60vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2b2b3b;
+            color: #ffd700;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+
+        /* For sized images on desktop and mobile devices */
+        @media (max-width: 600px) {
+            #itemModal .bg-gray-900 {
+            width: 95vw;
+            padding: 2vw;
+            }
+        }
