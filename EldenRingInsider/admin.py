@@ -9,15 +9,19 @@ from .models import Item, Build, EquipmentSlot
 #admin.site.register(Item)
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'image_url')
-    #list_filter = ('type',)
-   # search_fields = ('name',)
+    list_display = ('name', 'type', 'image_url', 'attack_power_short', 'defense_short')
+
+    def attack_power_short(self, obj):
+        return f"{obj.attack_power['base_damage']['physical']} Phys"
+
+    def defense_short(self, obj):
+        return f"{obj.defense['guard']['physical']} Guard"
+
 
 class EquipmentSlotInline(admin.TabularInline):
     model = EquipmentSlot
     extra = 5
-  #  min_num = 1
- #   fields = ('slot_name', 'item',)
+
 
 @admin.register(Build)
 class BuildAdmin(admin.ModelAdmin):

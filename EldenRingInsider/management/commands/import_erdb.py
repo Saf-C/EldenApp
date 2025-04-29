@@ -42,9 +42,57 @@ class Command(BaseCommand):
 
                 for data in items:
                     # Map ERDB fields to my model
+                    # Extract nested stats
+                    scaling = data.get("scaling", {})
+                    guard = data.get("guard", {})
+                    resistance = data.get("resistance", {})
+                    damage = data.get("damage", {})
+                    correction_calc = data.get("correction_calc_id", {})
+                    status_effects = data.get("status_effects", {})
+
+                    # Build attack power data
                     attack_power = {
-                        "types": data.get("attack_attributes", []),
-                        "sp_consumption": data.get("sp_consumption_rate", 0)
+                        "base_damage": {
+                            "physical": damage.get("physical", 0),
+                            "magic": damage.get("magic", 0),
+                            "holy": damage.get("holy", 0),
+                            "lightning": damage.get("lightning", 0),
+                            "fire": damage.get("fire", 0),
+                            "stamina": damage.get("stamina", 0)
+                        },
+                        "scaling": scaling,  # Raw scaling data
+                            "correction_attack_id": data.get("correction_attack_id"),
+                            "correction_calc_id": correction_calc,
+                            "status_effects": {
+                            "bleed": status_effects.get("bleed", 0),
+                            "frostbite": status_effects.get("frostbite", 0),
+                            "poison": status_effects.get("poison", 0),
+                            "scarlet_rot": status_effects.get("scarlet_rot", 0),
+                            "sleep": status_effects.get("sleep", 0),
+                            "madness": status_effects.get("madness", 0)
+                        }
+                    }
+
+                    # Build defense data
+                    defense = {
+                        "guard": {
+                            "physical": guard.get("physical", 0),
+                            "magic": guard.get("magic", 0),
+                            "fire": guard.get("fire", 0),
+                            "lightning": guard.get("lightning", 0),
+                            "holy": guard.get("holy", 0),
+                            "guard_boost": guard.get("guard_boost", 0)
+                        },
+                        "resistances": {
+                            "bleed": resistance.get("bleed", 0),
+                            "poison": resistance.get("poison", 0),
+                            "scarlet_rot": resistance.get("scarlet_rot", 0),
+                            "frostbite": resistance.get("frostbite", 0),
+                            "sleep": resistance.get("sleep", 0),
+                            "madness": resistance.get("madness", 0),
+                            "death_blight": resistance.get("death_blight", 0),
+                            "poise": resistance.get("poise", 0)
+                        }
                     }
 
                     Item.objects.update_or_create(
@@ -53,11 +101,11 @@ class Command(BaseCommand):
                             "name": data.get("name", "Unnamed"),
                             "type": item_type,
                             "description": "\n".join(data.get("description", [])),
-                            "image_url": f"https://example.com/images/{data.get('icon', '')}.png",  # Adjust for images
+                            "image_url": f"https://example.com/images/{data.get('icon', 'icon_fem', '')}.png",  # Adjust for images
                             "weight": data.get("weight", 0),
                             "required_stats": data.get("requirements", {}),
                             "attack_power": attack_power,
-                            # "defense": {},  # Remove if I find actual defense data
+                            "defense": defense,
                             "spell_requirements": data.get("effects", {}),
                         }
                     )

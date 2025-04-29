@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 # EldenRingInsider/models.py
 from django.db import models
+from django.contrib.postgres.indexes import GinIndex
 
 
 #class Item(models.Model):
@@ -91,6 +92,8 @@ class Item(models.Model):
         indexes = [
             models.Index(fields=['type']),
             models.Index(fields=['name']),
+            GinIndex(fields=['attack_power']),  # Creates GIN index for JSONB
+            GinIndex(fields=['defense'])
         ]
 
     def __str__(self):

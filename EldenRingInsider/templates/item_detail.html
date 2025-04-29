@@ -77,8 +77,10 @@
     <div class="container">
         <h1>{{ item.name }}</h1>
         <div class="item-details">
-            <img src="{{ item.image_url }}" alt="{{ item.name }}">
+            <img src="{{ item.icon }}" alt="{{ item.name }}">
             <p><strong>Type:</strong> {{ item.type }}</p>
+            <p><strong>Weight:</strong> {{ item.weight }}</p>
+            <p><strong>Requirements:</strong> {{ item.required_stats }} </p>
             <p><strong>Description:</strong> {{ item.description }}</p>
 
         </div>
