@@ -5,10 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ item.name }} - EldenRingInsider</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -54,9 +52,6 @@
         }
     </style>
 </head>
-
-
-<!-- Navigation Bar -->
 <nav class="navbar">
     <div class="logo">EldenRingInsider</div>
     <ul class="nav-links">
@@ -67,22 +62,21 @@
         <li><a href="#">Ash of Wars</a></li>
         <li><a href="#">Spells</a></li>
         <li><a href="{% url 'builds' %}">Builds</a></li>
-
-
     </ul>
 </nav>
-
-
 <body>
     <div class="container">
         <h1>{{ item.name }}</h1>
         <div class="item-details">
-            <img src="{{ item.icon }}" alt="{{ item.name }}">
+            <img src="{{ item.image_url }}" alt="{{ item.name }}">
             <p><strong>Type:</strong> {{ item.type }}</p>
             <p><strong>Weight:</strong> {{ item.weight }}</p>
             <p><strong>Requirements:</strong> {{ item.required_stats }} </p>
+            <p><strong>Scaling:</strong> {{ item.scaling }} </p>
+            <p><strong>Attack Power:</strong> {{ item.attack_power }} </p>
+            <p><strong>Defense:</strong> {{ item.defense }} </p>
+            <p><strong>Spell Requirements:</strong> {{ item.spell_requirements }} </p>
             <p><strong>Description:</strong> {{ item.description }}</p>
-
         </div>
         <div class="back-link">
             <a href="{% url 'item_list' %}">&larr; Back to Items</a>

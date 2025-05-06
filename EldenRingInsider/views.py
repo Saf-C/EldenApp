@@ -5,21 +5,21 @@
 
 
 # EldenRingInsider/views.py
-from django.shortcuts import render
-from .models import Item
+from .models import Item, ItemType
 from django.db.models import Q  # Import Q for complex queries
 from itertools import groupby
 from django.shortcuts import render, get_object_or_404
 from .models import Build
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator
+from collections import OrderedDict, defaultdict
 
 def item_list(request):
 
     # Get the search query from the request
     query = request.GET.get('q', '')
 
-    # Filter items based on the query or get all items if no query is provided
+    # Filter based on query or get all items
     if query:
         items = Item.objects.filter(
             Q(name__icontains=query) |
@@ -27,17 +27,42 @@ def item_list(request):
             Q(type__icontains=query)
         )
     else:
-        items = Item.objects.all()
+        items = Item.objects.all().order_by('type', 'name')
 
-    # Group items by their type
-    grouped_items = {}
+
+    ITEM_TYPE_ORDER = [
+        'Armor',
+        'Weapon',
+        'Spell',
+        'Talisman',
+        'Ash of War',
+        'Consumable',
+        'Other',
+    ]
+
+    # Grouping of items
+    temp_grouped = defaultdict(list)
     for item in items:
-        if item.type not in grouped_items:
-            grouped_items[item.type] = []
-        grouped_items[item.type].append(item)
+        temp_grouped[item.get_type_display()].append(item)
 
-    # Pass the grouped items to the template
-    return render(request, 'item_list.html', {'grouped_items': grouped_items, 'items' : items, 'query' : query})
+    # Order them according to my list
+    grouped_items = OrderedDict()
+    for t in ITEM_TYPE_ORDER:
+        if t in temp_grouped:
+            grouped_items[t] = temp_grouped[t]
+
+    # Anything that is not in the item type categories
+    for t in temp_grouped:
+        if t not in grouped_items:
+            grouped_items[t] = temp_grouped[t]
+
+
+
+    return render(request, 'item_list.html', {
+        'grouped_items': dict(grouped_items),
+        'query': query,
+    })
+
 
 
 def item_detail(request, item_id):

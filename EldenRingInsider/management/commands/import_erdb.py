@@ -101,9 +101,10 @@ class Command(BaseCommand):
                             "name": data.get("name", "Unnamed"),
                             "type": item_type,
                             "description": "\n".join(data.get("description", [])),
-                            "image_url": f"https://example.com/images/{data.get('icon', 'icon_fem', '')}.png",  # Adjust for images
+                            "image_url": f"https://example.com/images/{data.get('icon', '')}.png",  # Adjust for images
                             "weight": data.get("weight", 0),
                             "required_stats": data.get("requirements", {}),
+                            "scaling": data.get("scaling", {}),
                             "attack_power": attack_power,
                             "defense": defense,
                             "spell_requirements": data.get("effects", {}),

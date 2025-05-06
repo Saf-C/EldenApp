@@ -1,4 +1,4 @@
-from django.db import models
+
 
 # Create your models here.
 # EldenRingInsider/models.py
@@ -71,6 +71,8 @@ class ItemType(models.TextChoices):
     CONSUMABLE = 'consumable', 'Consumable'
     OTHER = 'other', 'Other'
 
+
+
 class Item(models.Model):
     # Core ERDB Fields
     erdb_id = models.CharField(max_length=50, null=True, blank=True)
@@ -82,6 +84,9 @@ class Item(models.Model):
     # Common Stats
     weight = models.FloatField(null=True, blank=True)
     required_stats = models.JSONField(null=True, blank=True)  # e.g. {'strength': 10, 'dexterity': 15}
+
+    # Scaling
+    scaling = models.JSONField(null=True, blank=True)
 
     # Type-Specific Stats
     attack_power = models.JSONField(null=True, blank=True)  # e.g. {'physical': 120, 'magic': 80}
