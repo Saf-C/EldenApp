@@ -107,7 +107,7 @@ class Item(models.Model):
 class Build(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    items = models.ManyToManyField('Item', blank=True)  # builds can have many items
+   # items = models.ManyToManyField('Item', blank=True)  # builds can have many items
 
     def __str__(self):
         return self.name
@@ -115,12 +115,33 @@ class Build(models.Model):
 
 
 class EquipmentSlot(models.Model):
-    build = models.ForeignKey('Build', on_delete=models.CASCADE, related_name='equipment_slots')
-    name = models.CharField(max_length=50, default="Unnamed Slot")
-    slot_name = models.CharField(max_length=100, default="Unnamed Slot")
+    SLOT_CHOICES = [
+        ('RH1', 'Right Hand 1'),
+        ('RH2', 'Right Hand 2'),
+        ('LH1', 'Left Hand 1'),
+        ('LH2', 'Left Hand 2'),
+        ('Helms', 'Helms'),
+        ('Chest Armor', 'Chest Armor'),
+        ('Gauntlets', 'Gauntlets'),
+        ('Greaves', 'Greaves'),
+        ('Talisman1', 'Talisman Slot 1'),
+        ('Talisman2', 'Talisman Slot 2'),
+        ('Talisman3', 'Talisman Slot 3'),
+        ('Talisman4', 'Talisman Slot 4'),
+        ('Spell1', 'Spell Slot 1'),
+        ('Spell2', 'Spell Slot 2'),
+        ('Spell3', 'Spell Slot 3'),
+        ('Spell4', 'Spell Slot 4'),
+        ('AshOfWar1', 'Ash of War 1'),
+        ('AshOfWar2', 'Ash of War 2'),
+        # Add more as needed
+    ]
+    build = models.ForeignKey(Build, on_delete=models.CASCADE, related_name='equipment_slots')
+    slot_name = models.CharField(max_length=50, choices=SLOT_CHOICES)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
-        unique_together = ('build', 'name')  # Can be removed
+        unique_together = ('build', 'slot_name')
 
     def __str__(self):
-        return self.name
+        return f"{self.build.name} - {self.get_slot_name_display()}"

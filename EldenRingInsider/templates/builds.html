@@ -48,36 +48,35 @@
 <body>
 
  <h1>Build Guides</h1>
-    <p style="text-align: center;">Optimised setups based on real game meta and stat scaling.</p>
+<p style="text-align: center;">Optimised setups based on real game meta and stat scaling.</p>
 
- {% if builds %}
+{% if builds %}
     {% for build in builds %}
         <div class="build-card">
             <h2>{{ build.name }}</h2>
             <p>{{ build.description }}</p>
-
-            <div class="item-container">
+            <div class="item-container" style="display: flex; flex-wrap: wrap; gap: 20px;">
                 {% for slot in build.equipment_slots.all %}
-                    <div class="card">
-                        <strong>{{ slot.get_slot_name_display }}</strong><br>
+                    <div class="card" style="width: 180px; min-height: 260px; display: flex; flex-direction: column; align-items: center;">
+                        <strong>{{ slot.get_slot_name_display }}</strong>
                         {% if slot.item %}
-                            <div class="tooltip">
-                                    <a href="{% url 'item_detail' slot.item.id %}">
-                                        <img
-                                            src="{{ slot.item.image_url }}"
-                                            alt="{{ slot.item.name }}"
-                                            class="item-img cursor-pointer"
-                                        />
-                                    </a>
-                                    <span class="tooltiptext">
-                                        <strong>{{ slot.item.name }}</strong><br>
-                                        {{ slot.item.description|truncatechars:60 }}
-                                    </span>
-                                </div>
-
-                            <p>{{ slot.item.name }}</p>
+                            <div class="tooltip" style="margin: 10px 0;">
+                                <a href="{% url 'item_detail' slot.item.id %}">
+                                    <img
+                                        src="{{ slot.item.image_url|default:'/static/placeholder.jpg' }}"
+                                        alt="{{ slot.item.name }}"
+                                        class="item-img"
+                                        style="width: 100px; height: 100px; object-fit: contain;"
+                                    />
+                                </a>
+                                <span class="tooltiptext">
+                                    <strong>{{ slot.item.name }}</strong><br>
+                                    {{ slot.item.description|truncatechars:60 }}
+                                </span>
+                            </div>
+                            <p style="margin: 0; color: #ffd700;">{{ slot.item.name }}</p>
                         {% else %}
-                            <p>Empty Slot</p>
+                            <p style="margin: 30px 0 0 0; color: #ccc;">Empty Slot</p>
                         {% endif %}
                     </div>
                 {% endfor %}
