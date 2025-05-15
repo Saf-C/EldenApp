@@ -219,6 +219,24 @@
 
 
 
+        /* Pagination */
+        .pagination .page-link {
+         background-color: #2b2b3b;
+         color: #ffd700;
+        border: 1px solid #444;
+        }
+        .pagination .active .page-link {
+        background-color: #ffd700;
+        color: #1e1e2e;
+        border-color: #ffd700;
+        }
+        .pagination .page-item.disabled .page-link {
+        color: #888;
+        }
+
+
+
+
         /* For sized images on desktop and mobile devices */
         @media (max-width: 600px) {
             #itemModal .bg-gray-900 {
