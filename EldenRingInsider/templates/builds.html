@@ -1,13 +1,16 @@
 <!-- EldenRingInsider/templates/builds.html -->
 <!DOCTYPE html>
 <html lang="en">
+ {% load static build_extras %}
+ {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Builds - Elden Ring Insider</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
 
 
 </head>
@@ -50,41 +53,39 @@
  <h1>Build Guides</h1>
 <p style="text-align: center;">Optimised setups based on real game meta and stat scaling.</p>
 
+
+{% load static %}
 {% if builds %}
-    {% for build in builds %}
-        <div class="build-card">
-            <h2>{{ build.name }}</h2>
-            <p>{{ build.description }}</p>
-            <div class="item-container" style="display: flex; flex-wrap: wrap; gap: 20px;">
-                {% for slot in build.equipment_slots.all %}
-                    <div class="card" style="width: 180px; min-height: 260px; display: flex; flex-direction: column; align-items: center;">
-                        <strong>{{ slot.get_slot_name_display }}</strong>
-                        {% if slot.item %}
-                            <div class="tooltip" style="margin: 10px 0;">
-                                <a href="{% url 'item_detail' slot.item.id %}">
-                                    <img
-                                        src="{{ slot.item.image_url|default:'/static/placeholder.jpg' }}"
-                                        alt="{{ slot.item.name }}"
-                                        class="item-img"
-                                        style="width: 100px; height: 100px; object-fit: contain;"
-                                    />
-                                </a>
-                                <span class="tooltiptext">
-                                    <strong>{{ slot.item.name }}</strong><br>
-                                    {{ slot.item.description|truncatechars:60 }}
-                                </span>
-                            </div>
-                            <p style="margin: 0; color: #ffd700;">{{ slot.item.name }}</p>
-                        {% else %}
-                            <p style="margin: 30px 0 0 0; color: #ccc;">Empty Slot</p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+  {% for build in builds %}
+    <div class="build-equipment-container">
+      <div class="build-header">
+        <h2>{{ build.name }}</h2>
+        <p>{{ build.description }}</p>
+      </div>
+      <div class="equipment-grid">
+        {% for slot_code, slot_label in slot_order %}
+          {% with slot=build.equipment_slots.all|get_slot:slot_code %}
+            <div class="equipment-slot">
+              <div class="slot-label">{{ slot_label }}</div>
+              {% if slot and slot.item %}
+                <a href="{% url 'item_detail' slot.item.id %}">
+                  <img src="{{ slot.item.image_url|default:'/static/placeholder.jpg' }}" alt="{{ slot.item.name }}" class="slot-img">
+                </a>
+                <div class="slot-tooltip">
+                  <strong>{{ slot.item.name }}</strong><br>
+                  {{ slot.item.description|truncatechars:60 }}
+                </div>
+              {% else %}
+                <img src="{% static 'placeholder.jpg' %}" alt="Empty" class="slot-img empty">
+              {% endif %}
             </div>
-        </div>
-    {% endfor %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
 {% else %}
-    <p style="text-align:center;">No builds found.</p>
+  <p style="text-align:center;">No builds found.</p>
 {% endif %}
 
 

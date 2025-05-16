@@ -58,7 +58,18 @@ def builds_view(request):
     builds = Build.objects.prefetch_related('equipment_slots__item')
     if query:
         builds = builds.filter(name__icontains=query)
-    return render(request, 'builds.html', {'builds': builds, 'query': query})
+    slot_order = [
+        ('RH1', 'Right Hand 1'), ('RH2', 'Right Hand 2'),
+        ('LH1', 'Left Hand 1'), ('LH2', 'Left Hand 2'),
+        ('Helms', 'Helm'), ('Chest Armor', 'Chest'), ('Gauntlets', 'Gauntlets'), ('Greaves', 'Greaves'),
+        ('Talisman1', 'Talisman 1'), ('Talisman2', 'Talisman 2'),
+        ('Talisman3', 'Talisman 3'), ('Talisman4', 'Talisman 4'),
+        ('Spell1', 'Spell 1'), ('Spell2', 'Spell 2'),
+        ('Spell3', 'Spell 3'), ('Spell4', 'Spell 4'),
+        ('AshOfWar1', 'Ash of War 1'), ('AshOfWar2', 'Ash of War 2'),
+    ]
+    return render(request, 'builds.html', {'builds': builds, 'query': query, 'slot_order': slot_order})
+
 
 def item_json_view(request, item_id):
     item = get_object_or_404(Item, id=item_id)

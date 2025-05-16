@@ -1,11 +1,11 @@
 <!-- EldenRingInsider/templates/item_detail.html -->
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ item.name }} - EldenRingInsider</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         body {
@@ -79,7 +79,8 @@
             <p><strong>Description:</strong> {{ item.description }}</p>
         </div>
         <div class="back-link">
-            <a href="{% url 'item_list' %}">&larr; Back to Items</a>
+            <a href="{% url 'item_list' %}">&larr; Items</a>
+            <a href="{% url 'builds' %}">&larr; Builds</a>
         </div>
     </div>
 </body>

@@ -237,6 +237,75 @@
 
 
 
+        /* Builds */
+        .build-equipment-container {
+        background: #23232b;
+        border-radius: 16px;
+        margin: 30px auto;
+        padding: 20px 30px;
+        max-width: 600px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+        }
+
+        .build-header {
+        text-align: center;
+        margin-bottom: 18px;
+        }
+
+        .equipment-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 80px);
+        grid-template-rows: repeat(4, 80px);
+        gap: 18px;
+        justify-content: center;
+        }
+
+        .equipment-slot {
+        position: relative;
+        text-align: center;
+        }
+
+        .slot-label {
+        font-size: 0.85em;
+        color: #ffd700;
+        margin-bottom: 4px;
+        }
+
+        .slot-img {
+        width: 64px;
+        height: 64px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #1e1e2e;
+        border: 2px solid #444;
+        transition: box-shadow 0.2s;
+        }
+
+        .slot-img.empty {
+        opacity: 0.3;
+        }
+
+        .equipment-slot:hover .slot-tooltip {
+        display: block;
+        }
+
+        .slot-tooltip {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2b2b3b;
+        color: #ffd700;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        z-index: 10;
+        width: 180px;
+        }
+
+
+
         /* For sized images on desktop and mobile devices */
         @media (max-width: 600px) {
             #itemModal .bg-gray-900 {
