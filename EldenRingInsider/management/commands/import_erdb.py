@@ -42,13 +42,15 @@ class Command(BaseCommand):
 
                 for data in items:
                     # Map ERDB fields to my model
+                    affinities = data.get("affinity", {})
+                    standard_affinity = affinities.get("Standard") or next(iter(affinities.values()), {})
                     # Extract nested stats
-                    scaling = data.get("scaling", {})
-                    guard = data.get("guard", {})
-                    resistance = data.get("resistance", {})
-                    damage = data.get("damage", {})
-                    correction_calc = data.get("correction_calc_id", {})
-                    status_effects = data.get("status_effects", {})
+                    scaling = standard_affinity.get("scaling", {})
+                    guard = standard_affinity.get("guard", {})
+                    resistance = standard_affinity.get("resistance", {})
+                    damage = standard_affinity.get("damage", {})
+                    correction_calc = standard_affinity.get("correction_calc_id", {})
+                    status_effects = standard_affinity.get("status_effects", {})
 
                     # Build attack power data
                     attack_power = {
@@ -61,7 +63,7 @@ class Command(BaseCommand):
                             "stamina": damage.get("stamina", 0)
                         },
                         "scaling": scaling,  # Raw scaling data
-                            "correction_attack_id": data.get("correction_attack_id"),
+                            "correction_attack_id": standard_affinity.get("correction_attack_id"),
                             "correction_calc_id": correction_calc,
                             "status_effects": {
                             "bleed": status_effects.get("bleed", 0),
@@ -104,7 +106,7 @@ class Command(BaseCommand):
                             "image_url": f"https://example.com/images/{data.get('icon', '')}.png",  # Adjust for images
                             "weight": data.get("weight", 0),
                             "required_stats": data.get("requirements", {}),
-                            "scaling": data.get("scaling", {}),
+                            "scaling": scaling, # Changed to affinities
                             "attack_power": attack_power,
                             "defense": defense,
                             "spell_requirements": data.get("effects", {}),
