@@ -1,3 +1,4 @@
+# EldenRingInsider/management/commands/import_erdb.py
 import json
 import os
 from django.core.management.base import BaseCommand
@@ -104,6 +105,7 @@ class Command(BaseCommand):
                             "type": item_type,
                             "description": "\n".join(data.get("description", [])),
                             "image_url": f"https://example.com/images/{data.get('icon', '')}.png",  # Adjust for images
+                            "icon": data.get("icon", ""),
                             "weight": data.get("weight", 0),
                             "required_stats": data.get("requirements", {}),
                             "scaling": scaling, # Changed to affinities

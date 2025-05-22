@@ -141,7 +141,7 @@
 
 
 
-
+        /* Build */
         .build-card {
             margin: 30px auto;
             padding: 10px;
@@ -176,6 +176,91 @@
 
         .item-img:hover {
            transform: scale(1.2);
+        }
+
+        /* Build Stat Slider */
+        .stat-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 8px 0;
+        }
+
+        .stat-label {
+        width: 110px;
+        color: #ffd700;
+        font-weight: bold;
+        text-align: left;
+        }
+
+        .stat-btn {
+        background: #23232b;
+        color: #ffd700;
+        border: none;
+        font-size: 1.2em;
+        margin: 0 8px;
+        padding: 3px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+        }
+
+        .stat-btn:hover {
+        background: #ffd700;
+        color: #23232b;
+        }
+
+        .stat-value {
+        width: 32px;
+        display: inline-block;
+        text-align: center;
+        font-size: 1.1em;
+        }
+
+        #stat-editor {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 16px 0 8px 0;
+        }
+
+       .stat-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0;
+        }
+
+       .stat-label {
+        width: 110px;
+        color: #ffd700;
+        font-weight: bold;
+        text-align: left;
+        font-size: 1.1em;
+        }
+
+        .stat-btn {
+        background: #23232b;
+        color: #ffd700;
+        border: none;
+        font-size: 1.2em;
+        margin: 0 8px;
+        padding: 3px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: background 0.2s, color 0.2s;
+        }
+
+        .stat-btn:hover {
+        background: #ffd700;
+        color: #23232b;
+        }
+
+        .stat-value {
+        width: 36px;
+        display: inline-block;
+        text-align: center;
+        font-size: 1.1em;
         }
 
 

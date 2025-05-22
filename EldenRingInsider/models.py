@@ -24,6 +24,8 @@ class Item(models.Model):
     type = models.CharField(max_length=20, choices=ItemType.choices, default=ItemType.OTHER)
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True, null=True)
+    icon = models.CharField(max_length=100, blank=True, null=True)
+    location = models.TextField(blank=True, null=True)
 
     # Common Stats
     weight = models.FloatField(null=True, blank=True)

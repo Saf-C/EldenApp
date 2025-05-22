@@ -77,4 +77,5 @@ def item_json_view(request, item_id):
         'name': item.name,
         'description': item.description,
         'image_url': item.image_url,
+        'icon': item.icon,
     })

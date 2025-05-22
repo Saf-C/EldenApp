@@ -54,6 +54,106 @@
 <p style="text-align: center;">Optimised setups based on real game meta and stat scaling.</p>
 
 
+
+ <!-- Stat Slider -->
+<div class="build-equipment-container" style="margin-top:30px;">
+    <h2 style="text-align:center;">Customize Your Build Stats</h2>
+    <div id="stat-editor" style="max-width:400px;margin:0 auto;">
+        <div class="stat-row">
+            <span class="stat-label">Level</span>
+            <span id="level-value" class="stat-value">1</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Vigor</span>
+            <button class="stat-btn" onclick="changeStat('vigor', -1)">&#60;</button>
+            <span id="vigor-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('vigor', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Mind</span>
+            <button class="stat-btn" onclick="changeStat('mind', -1)">&#60;</button>
+            <span id="mind-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('mind', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Endurance</span>
+            <button class="stat-btn" onclick="changeStat('endurance', -1)">&#60;</button>
+            <span id="endurance-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('endurance', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Strength</span>
+            <button class="stat-btn" onclick="changeStat('strength', -1)">&#60;</button>
+            <span id="strength-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('strength', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Dexterity</span>
+            <button class="stat-btn" onclick="changeStat('dexterity', -1)">&#60;</button>
+            <span id="dexterity-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('dexterity', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Intelligence</span>
+            <button class="stat-btn" onclick="changeStat('intelligence', -1)">&#60;</button>
+            <span id="intelligence-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('intelligence', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Faith</span>
+            <button class="stat-btn" onclick="changeStat('faith', -1)">&#60;</button>
+            <span id="faith-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('faith', 1)">&#62;</button>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Arcane</span>
+            <button class="stat-btn" onclick="changeStat('arcane', -1)">&#60;</button>
+            <span id="arcane-value" class="stat-value">10</span>
+            <button class="stat-btn" onclick="changeStat('arcane', 1)">&#62;</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const minStat = 1;
+const maxStat = 99;
+let stats = {
+    vigor: 10,
+    mind: 10,
+    endurance: 10,
+    strength: 10,
+    dexterity: 10,
+    intelligence: 10,
+    faith: 10,
+    arcane: 10
+};
+
+function updateLevel() {
+    // Level is sum of all stats minus 79 (Wretch base), or adjust as needed
+    let level = Object.values(stats).reduce((a, b) => a + b, 0) - 79 + 1;
+    document.getElementById('level-value').innerText = level;
+}
+
+function updateStats() {
+    for (let stat in stats) {
+        document.getElementById(stat + '-value').innerText = stats[stat];
+    }
+    updateLevel();
+}
+
+function changeStat(stat, delta) {
+    stats[stat] = Math.max(minStat, Math.min(maxStat, stats[stat] + delta));
+    updateStats();
+}
+
+window.onload = updateStats;
+</script>
+
+
+
+
+
+
 {% load static %}
 {% if builds %}
   {% for build in builds %}
