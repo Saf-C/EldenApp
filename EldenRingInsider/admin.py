@@ -9,7 +9,7 @@ from .models import Item, Build, EquipmentSlot
 #admin.site.register(Item)
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'image_url', 'icon', 'location', 'attack_power_short', 'defense_short')
+    list_display = ('name', 'type', 'image_url', 'icon', 'attack_power_short', 'defense_short')
     search_fields = ['name', 'type', 'description']
 
     def attack_power_short(self, obj):

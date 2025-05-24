@@ -57,6 +57,34 @@
 
  <!-- Stat Slider -->
 <div class="build-equipment-container" style="margin-top:30px;">
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <div>
+        <label for="class-select" style="color:#ffd700; font-weight:bold;">Starting Class:</label>
+        <select id="class-select" style="padding: 6px 12px; border-radius: 6px; background: #23232b; color: #ffd700; border: none;">
+            <option value="wretch">Wretch</option>
+            <option value="astrologer">Astrologer</option>
+            <option value="hero">Hero</option>
+            <option value="samurai">Samurai</option>
+            <option value="bandit">Bandit</option>
+            <option value="prisoner">Prisoner</option>
+            <option value="vagabond">Vagabond</option>
+            <option value="confessor">Confessor</option>
+            <option value="prophet">Prophet</option>
+            <option value="warrior">Warrior</option>
+        </select>
+    </div>
+    <button class="stat-btn" id="clear-btn" style="padding:6px 18px;">Clear</button>
+</div>
+
+
+
+
+
+
+
+
+
     <h2 style="text-align:center;">Customize Your Build Stats</h2>
     <div id="stat-editor" style="max-width:400px;margin:0 auto;">
         <div class="stat-row">
@@ -117,16 +145,22 @@
 <script>
 const minStat = 1;
 const maxStat = 99;
-let stats = {
-    vigor: 10,
-    mind: 10,
-    endurance: 10,
-    strength: 10,
-    dexterity: 10,
-    intelligence: 10,
-    faith: 10,
-    arcane: 10
+
+// Default stats for each class
+const classDefaults = {
+    wretch:       {vigor:10, mind:10, endurance:10, strength:10, dexterity:10, intelligence:10, faith:10, arcane:10},
+    astrologer:   {vigor:9, mind:15, endurance:9, strength:8, dexterity:12, intelligence:16, faith:7, arcane:9},
+    hero:         {vigor:14, mind:9, endurance:12, strength:16, dexterity:9, intelligence:7, faith:8, arcane:11},
+    samurai:      {vigor:12, mind:11, endurance:13, strength:12, dexterity:15, intelligence:9, faith:8, arcane:8},
+    bandit:       {vigor:10, mind:11, endurance:10, strength:9, dexterity:13, intelligence:9, faith:8, arcane:14},
+    prisoner:     {vigor:9, mind:12, endurance:11, strength:11, dexterity:14, intelligence:14, faith:6, arcane:9},
+    vagabond:     {vigor:15, mind:10, endurance:11, strength:14, dexterity:13, intelligence:9, faith:9, arcane:7},
+    confessor:    {vigor:10, mind:13, endurance:10, strength:12, dexterity:12, intelligence:9, faith:14, arcane:9},
+    prophet:      {vigor:10, mind:14, endurance:8, strength:11, dexterity:10, intelligence:7, faith:16, arcane:10},
+    warrior:      {vigor:11, mind:12, endurance:11, strength:10, dexterity:16, intelligence:10, faith:8, arcane:9},
 };
+
+let stats = {...classDefaults['wretch']}; // Default to Wretch
 
 function updateLevel() {
     // Level is sum of all stats minus 79 (Wretch base), or adjust as needed
@@ -146,8 +180,26 @@ function changeStat(stat, delta) {
     updateStats();
 }
 
-window.onload = updateStats;
+function setClassDefaults(className) {
+    stats = {...classDefaults[className]};
+    updateStats();
+}
+
+function clearStats() {
+    const className = document.getElementById('class-select').value;
+    setClassDefaults(className);
+}
+
+// Event listeners
+window.onload = function() {
+    updateStats();
+    document.getElementById('class-select').addEventListener('change', function() {
+        setClassDefaults(this.value);
+    });
+    document.getElementById('clear-btn').addEventListener('click', clearStats);
+};
 </script>
+
 
 
 

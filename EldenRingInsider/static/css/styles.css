@@ -99,6 +99,7 @@
         }
         .item-type-container {
             margin-top: 20px;
+            margin-bottom: 50px;
         }
         .card {
             background-color: #2b2b3b;
@@ -180,87 +181,87 @@
 
         /* Build Stat Slider */
         .stat-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
         }
 
         .stat-label {
-        width: 110px;
-        color: #ffd700;
-        font-weight: bold;
-        text-align: left;
+            width: 110px;
+            color: #ffd700;
+            font-weight: bold;
+            text-align: left;
         }
 
         .stat-btn {
-        background: #23232b;
-        color: #ffd700;
-        border: none;
-        font-size: 1.2em;
-        margin: 0 8px;
-        padding: 3px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.2s;
+            background: #23232b;
+            color: #ffd700;
+            border: none;
+            font-size: 1.2em;
+            margin: 0 8px;
+            padding: 3px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
         .stat-btn:hover {
-        background: #ffd700;
-        color: #23232b;
+            background: #ffd700;
+            color: #23232b;
         }
 
         .stat-value {
-        width: 32px;
-        display: inline-block;
-        text-align: center;
-        font-size: 1.1em;
+            width: 32px;
+            display: inline-block;
+            text-align: center;
+            font-size: 1.1em;
         }
 
         #stat-editor {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 16px 0 8px 0;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 16px 0 8px 0;
         }
 
        .stat-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
         }
 
        .stat-label {
-        width: 110px;
-        color: #ffd700;
-        font-weight: bold;
-        text-align: left;
-        font-size: 1.1em;
+            width: 110px;
+            color: #ffd700;
+            font-weight: bold;
+            text-align: left;
+            font-size: 1.1em;
         }
 
         .stat-btn {
-        background: #23232b;
-        color: #ffd700;
-        border: none;
-        font-size: 1.2em;
-        margin: 0 8px;
-        padding: 3px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        transition: background 0.2s, color 0.2s;
+            background: #23232b;
+            color: #ffd700;
+            border: none;
+            font-size: 1.2em;
+            margin: 0 8px;
+            padding: 3px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background 0.2s, color 0.2s;
         }
 
         .stat-btn:hover {
-        background: #ffd700;
-        color: #23232b;
+            background: #ffd700;
+            color: #23232b;
         }
 
         .stat-value {
-        width: 36px;
-        display: inline-block;
-        text-align: center;
-        font-size: 1.1em;
+            width: 36px;
+            display: inline-block;
+            text-align: center;
+            font-size: 1.1em;
         }
 
 
@@ -324,69 +325,69 @@
 
         /* Builds */
         .build-equipment-container {
-        background: #23232b;
-        border-radius: 16px;
-        margin: 30px auto;
-        padding: 20px 30px;
-        max-width: 600px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+            background: #23232b;
+            border-radius: 16px;
+            margin: 30px auto;
+            padding: 20px 30px;
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
         }
 
         .build-header {
-        text-align: center;
-        margin-bottom: 18px;
+            text-align: center;
+            margin-bottom: 18px;
         }
 
         .equipment-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 80px);
-        grid-template-rows: repeat(4, 80px);
-        gap: 18px;
-        justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            grid-template-rows: repeat(4, 80px);
+            gap: 18px;
+            justify-content: center;
         }
 
         .equipment-slot {
-        position: relative;
-        text-align: center;
+            position: relative;
+            text-align: center;
         }
 
         .slot-label {
-        font-size: 0.85em;
-        color: #ffd700;
-        margin-bottom: 4px;
+            font-size: 0.85em;
+            color: #ffd700;
+            margin-bottom: 4px;
         }
 
         .slot-img {
-        width: 64px;
-        height: 64px;
-        object-fit: contain;
-        border-radius: 8px;
-        background: #1e1e2e;
-        border: 2px solid #444;
-        transition: box-shadow 0.2s;
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #1e1e2e;
+            border: 2px solid #444;
+            transition: box-shadow 0.2s;
         }
 
         .slot-img.empty {
-        opacity: 0.3;
+            opacity: 0.3;
         }
 
         .equipment-slot:hover .slot-tooltip {
-        display: block;
+            display: block;
         }
 
         .slot-tooltip {
-        display: none;
-        position: absolute;
-        top: 70px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #2b2b3b;
-        color: #ffd700;
-        padding: 8px 14px;
-        border-radius: 8px;
-        font-size: 0.9em;
-        z-index: 10;
-        width: 180px;
+            display: none;
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2b2b3b;
+            color: #ffd700;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            z-index: 10;
+            width: 180px;
         }
 
 
