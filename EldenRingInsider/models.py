@@ -1,13 +1,55 @@
-
-
-# Create your models here.
 # EldenRingInsider/models.py
+
 from django.db import models
 from django.contrib.postgres.indexes import GinIndex
 
-
 class ItemType(models.TextChoices):
-    WEAPON = 'weapon', 'Weapon'
+    # Weapon sub categorie
+    # shield types
+    SMALL_SHIELD = 'small_shield', 'Small Shield'
+    MEDIUM_SHIELD = 'medium_shield', 'Medium Shield'
+    GREATSHIELD = 'greatshield', 'Greatshield'
+    # Staves
+    STAFF = 'staff', 'Staff'
+    GLINTSTONE_STAFF = 'glintstone_staff', 'Glintstone Staff'
+    SACRED_SEAL = 'sacred_seal', 'Sacred Seal'
+    # Ranged
+    BALLISTA = 'ballista', 'Ballista'
+    CROSSBOW = 'crossbow', 'Crossbow'
+    BOW = 'bow', 'Bow'
+    LIGHT_BOW = 'light_bow', 'Light Bow'
+    GREATBOW = 'greatbow', 'Greatbow'
+    # Melee
+    KATANA = 'katana', 'Katana'
+    GREAT_KATANA = 'great_katana', 'Great Katana'
+    GREATSWORD = 'greatsword', 'Greatsword'
+    COLOSSAL_SWORD = 'colossal_sword', 'Colossal Sword'
+    COLOSSAL_WEAPON = 'colossal_weapon', 'Colossal Weapon'
+    CURVED_SWORD = 'curved_sword', 'Curved Sword'
+    STRAIGHTSWORD = 'straightsword', 'Straight Sword'
+    DAGGER = 'dagger', 'Dagger'
+    TWINBLADE = 'twinblade', 'Twinblade'
+    AXE = 'axe', 'Axe'
+    GREAT_AXE = 'great_axe', 'Great Axe'
+    HAMMER = 'hammer', 'Hammer'
+    GREAT_HAMMER = 'great_hammer', 'Great Hammer'
+    FLAIL = 'flail', 'Flail'
+    SPEAR = 'spear', 'Spear'
+    SHORT_SPEAR = 'short_spear', 'Short Spear'
+    GREAT_SPEAR = 'great_spear', 'Great Spear'
+    HALBERD = 'halberd', 'Halberd'
+    HEAVY_THRUSTING_SWORD = 'heavy_thrusting_sword', 'Heavy Thrusting Sword'
+    THRUSTING_SWORD = 'thrusting_sword', 'Thrusting Sword'
+    CLAW = 'claw', 'Claw'
+    FISTS = 'fists', 'Fists'
+    BACKHAND_BLADE = 'backhand_blade', 'Backhand Blade'
+    REAPER = 'reaper', 'Reaper'
+    WHIP = 'whip', 'Whip'
+    # Torches
+    TORCH = 'torch', 'Torch'
+
+
+    # Other item types
     ARMOR = 'armor', 'Armor'
     TALISMAN = 'talisman', 'Talisman'
     SPELL = 'spell', 'Spell'
@@ -15,35 +57,27 @@ class ItemType(models.TextChoices):
     CONSUMABLE = 'consumable', 'Consumable'
     OTHER = 'other', 'Other'
 
-
-
 class Item(models.Model):
-    # Core ERDB Fields
     erdb_id = models.CharField(max_length=50, null=True, blank=True)
     name = models.CharField(max_length=100)
-    type = models.CharField(max_length=20, choices=ItemType.choices, default=ItemType.OTHER)
+    type = models.CharField(max_length=32, choices=ItemType.choices, default=ItemType.OTHER)
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True, null=True)
     icon = models.CharField(max_length=100, blank=True, null=True)
     location = models.TextField(blank=True, null=True)
 
-    # Common Stats
     weight = models.FloatField(null=True, blank=True)
-    required_stats = models.JSONField(null=True, blank=True)  # e.g. {'strength': 10, 'dexterity': 15}
-
-    # Scaling
+    required_stats = models.JSONField(null=True, blank=True)
     scaling = models.JSONField(null=True, blank=True)
-
-    # Type-Specific Stats
-    attack_power = models.JSONField(null=True, blank=True)  # e.g. {'physical': 120, 'magic': 80}
-    defense = models.JSONField(null=True, blank=True)       # e.g. {'physical': 8.5, 'magic': 10.2}
+    attack_power = models.JSONField(null=True, blank=True)
+    defense = models.JSONField(null=True, blank=True)
     spell_requirements = models.JSONField(null=True, blank=True)
 
     class Meta:
         indexes = [
             models.Index(fields=['type']),
             models.Index(fields=['name']),
-            GinIndex(fields=['attack_power']),  # Creates GIN index for JSONB
+            GinIndex(fields=['attack_power']),
             GinIndex(fields=['defense'])
         ]
 
@@ -53,12 +87,9 @@ class Item(models.Model):
 class Build(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-   # items = models.ManyToManyField('Item', blank=True)  # builds can have many items
 
     def __str__(self):
         return self.name
-
-
 
 class EquipmentSlot(models.Model):
     SLOT_CHOICES = [
@@ -80,7 +111,6 @@ class EquipmentSlot(models.Model):
         ('Spell4', 'Spell Slot 4'),
         ('AshOfWar1', 'Ash of War 1'),
         ('AshOfWar2', 'Ash of War 2'),
-
     ]
     build = models.ForeignKey(Build, on_delete=models.CASCADE, related_name='equipment_slots')
     slot_name = models.CharField(max_length=50, choices=SLOT_CHOICES)

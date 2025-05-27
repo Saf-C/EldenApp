@@ -1,25 +1,70 @@
 # EldenRingInsider/management/commands/import_erdb.py
+
 import json
 import os
 from django.core.management.base import BaseCommand
 from EldenRingInsider.models import Item, ItemType
 
+# Map ERDB categories to your ItemType choices
+ERDB_TO_ITEMTYPE = {
+    # Armor
+    "Head": ItemType.ARMOR,
+    "Body": ItemType.ARMOR,
+    "Arms": ItemType.ARMOR,
+    "Legs": ItemType.ARMOR,
+
+    # Shields
+    "Small Shield": ItemType.SMALL_SHIELD,
+    "Medium Shield": ItemType.MEDIUM_SHIELD,
+    "Greatshield": ItemType.GREATSHIELD,
+
+    # Ranged
+    "Ballista": ItemType.BALLISTA,
+    "Bow": ItemType.BOW,
+    "Light Bow": ItemType.LIGHT_BOW,
+    "Crossbow": ItemType.CROSSBOW,
+    "Greatbow": ItemType.GREATBOW,
+
+    # Weapon
+    "Claw": ItemType.CLAW,
+    "Colossal Sword": ItemType.COLOSSAL_SWORD,
+    "Colossal Weapon": ItemType.COLOSSAL_WEAPON,
+    "Curved Greatsword": ItemType.CURVED_SWORD,
+    "Curved Sword": ItemType.CURVED_SWORD,
+    "Dagger": ItemType.DAGGER,
+    "Flail": ItemType.FLAIL,
+    "Glintstone Staff": ItemType.GLINTSTONE_STAFF,
+    "Great Club": ItemType.GREAT_HAMMER,
+    "Great Hammer": ItemType.GREAT_HAMMER,
+    "Greatsword": ItemType.GREATSWORD,
+    "Greataxe": ItemType.GREAT_AXE,
+    "Halberd": ItemType.HALBERD,
+    "Hammer": ItemType.HAMMER,
+    "Heavy Thrusting Sword": ItemType.HEAVY_THRUSTING_SWORD,
+    "Katana": ItemType.KATANA,
+    "Reaper": ItemType.REAPER,
+    "Spear": ItemType.SPEAR,
+    "Straight Sword": ItemType.STRAIGHTSWORD,
+    "Thrusting Sword": ItemType.THRUSTING_SWORD,
+    "Torch": ItemType.TORCH,
+    "Twinblade": ItemType.TWINBLADE,
+    "Whip": ItemType.WHIP,
+    "Axe": ItemType.AXE,
+    "Great Spear": ItemType.GREAT_SPEAR,
+    "Fist": ItemType.FISTS,
+
+    # Spells
+    "Sacred Seal": ItemType.SACRED_SEAL,
+    "Sorcery": ItemType.SPELL,
+    "Incantation": ItemType.SPELL,
+
+}
 
 class Command(BaseCommand):
-    help = 'Import Elden Ring items from ERDB-generated JSON files'
+    help = 'Import Elden Ring items from ERDB-generated JSON files, preserving manual images/locations.'
 
     def handle(self, *args, **kwargs):
         data_dir = os.path.join("data", "1.10.0")
-
-        category_mapping = {
-            "armor": ItemType.ARMOR,
-            "armaments": ItemType.WEAPON,
-            "talismans": ItemType.TALISMAN,
-            "ashes-of-war": ItemType.ASH_OF_WAR,
-            "spells": ItemType.SPELL,
-            "spirit-ashes": ItemType.OTHER,
-            "tools": ItemType.OTHER,
-        }
 
         target_files = [
             "armor.json",
@@ -36,84 +81,47 @@ class Command(BaseCommand):
                 with open(file_path, "r", encoding="utf-8") as f:
                     raw_data = json.load(f)
 
-                # Handle both dictionary and list structures
                 items = list(raw_data.values()) if isinstance(raw_data, dict) else raw_data
-                category = filename.replace(".json", "")
-                item_type = category_mapping.get(category, ItemType.OTHER)
+
+
+
 
                 for data in items:
-                    # Map ERDB fields to my model
-                    affinities = data.get("affinity", {})
-                    standard_affinity = affinities.get("Standard") or next(iter(affinities.values()), {})
-                    # Extract nested stats
-                    scaling = standard_affinity.get("scaling", {})
-                    guard = standard_affinity.get("guard", {})
-                    resistance = standard_affinity.get("resistance", {})
-                    damage = standard_affinity.get("damage", {})
-                    correction_calc = standard_affinity.get("correction_calc_id", {})
-                    status_effects = standard_affinity.get("status_effects", {})
+                    erdb_id = str(data.get("id"))
+                    erdb_category = data.get("category")  # Should be the specific category from ERDB
+                    item_type = ERDB_TO_ITEMTYPE.get(erdb_category, ItemType.OTHER)
 
-                    # Build attack power data
-                    attack_power = {
-                        "base_damage": {
-                            "physical": damage.get("physical", 0),
-                            "magic": damage.get("magic", 0),
-                            "holy": damage.get("holy", 0),
-                            "lightning": damage.get("lightning", 0),
-                            "fire": damage.get("fire", 0),
-                            "stamina": damage.get("stamina", 0)
-                        },
-                        "scaling": scaling,  # Raw scaling data
-                            "correction_attack_id": standard_affinity.get("correction_attack_id"),
-                            "correction_calc_id": correction_calc,
-                            "status_effects": {
-                            "bleed": status_effects.get("bleed", 0),
-                            "frostbite": status_effects.get("frostbite", 0),
-                            "poison": status_effects.get("poison", 0),
-                            "scarlet_rot": status_effects.get("scarlet_rot", 0),
-                            "sleep": status_effects.get("sleep", 0),
-                            "madness": status_effects.get("madness", 0)
-                        }
-                    }
+                    # Diagnosing categorisation of items
+                    erdb_category = data.get("category")
+                    item_type = ERDB_TO_ITEMTYPE.get(erdb_category, ItemType.OTHER)
+                    if item_type == ItemType.OTHER:
+                        print(f"Unmapped category: {erdb_category}")
 
-                    # Build defense data
-                    defense = {
-                        "guard": {
-                            "physical": guard.get("physical", 0),
-                            "magic": guard.get("magic", 0),
-                            "fire": guard.get("fire", 0),
-                            "lightning": guard.get("lightning", 0),
-                            "holy": guard.get("holy", 0),
-                            "guard_boost": guard.get("guard_boost", 0)
-                        },
-                        "resistances": {
-                            "bleed": resistance.get("bleed", 0),
-                            "poison": resistance.get("poison", 0),
-                            "scarlet_rot": resistance.get("scarlet_rot", 0),
-                            "frostbite": resistance.get("frostbite", 0),
-                            "sleep": resistance.get("sleep", 0),
-                            "madness": resistance.get("madness", 0),
-                            "death_blight": resistance.get("death_blight", 0),
-                            "poise": resistance.get("poise", 0)
-                        }
-                    }
+                    # Extract stats as needed (example placeholders)
+                    scaling = data.get("scaling", {})
+                    attack_power = data.get("attack_power", {})
+                    defense = data.get("defense", {})
 
-                    Item.objects.update_or_create(
-                        erdb_id=str(data.get("id")),
+                    obj, created = Item.objects.get_or_create(
+                        erdb_id=erdb_id,
                         defaults={
                             "name": data.get("name", "Unnamed"),
                             "type": item_type,
                             "description": "\n".join(data.get("description", [])),
-                            "image_url": f"https://example.com/images/{data.get('icon', '')}.png",  # Adjust for images
+                            "image_url": f"https://example.com/images/{data.get('icon', '')}.png",
                             "icon": data.get("icon", ""),
                             "weight": data.get("weight", 0),
                             "required_stats": data.get("requirements", {}),
-                            "scaling": scaling, # Changed to affinities
+                            "scaling": scaling,
                             "attack_power": attack_power,
                             "defense": defense,
                             "spell_requirements": data.get("effects", {}),
                         }
                     )
+                    if not created:
+                        # Only update the type/category!
+                        obj.type = item_type
+                        obj.save(update_fields=["type"])
 
                 self.stdout.write(self.style.SUCCESS(f"✅ {filename} imported ({len(items)} items)"))
 
