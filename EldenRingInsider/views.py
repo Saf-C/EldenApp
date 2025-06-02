@@ -21,7 +21,7 @@ def item_list(request):
         'staff', 'glintstone_staff', 'sacred_seal',
         'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
         'torch',
-        'armor', 'spell', 'talisman', 'ash_of_war', 'consumable', 'other',
+        'armor', 'spell', 'incantation', 'sorcery', 'talisman', 'ash_of_war', 'consumable', 'other',
     ]
 
     type_index = {t: i for i, t in enumerate(item_type_order)}

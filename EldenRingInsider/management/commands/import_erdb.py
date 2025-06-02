@@ -58,6 +58,13 @@ ERDB_TO_ITEMTYPE = {
     "Sorcery": ItemType.SPELL,
     "Incantation": ItemType.SPELL,
 
+    # Ashes of War
+    "Ash Of War": ItemType.ASH_OF_WAR,
+    "Consumable": ItemType.CONSUMABLE,
+
+    # Talisman
+    "Talisman": ItemType.TALISMAN,
+
 }
 
 class Command(BaseCommand):
