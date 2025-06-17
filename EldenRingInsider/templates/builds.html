@@ -3,6 +3,8 @@
 <html lang="en">
  {% load static build_extras %}
  {% load static %}
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,7 +86,7 @@
 
 
 
-
+<div class="build-class">
     <h2 style="text-align:center;">Customize Your Build Stats</h2>
     <div id="stat-editor" style="max-width:400px;margin:0 auto;">
         <div class="stat-row">
@@ -140,6 +142,7 @@
             <button class="stat-btn" onclick="changeStat('arcane', 1)">&#62;</button>
         </div>
     </div>
+</div>
 </div>
 
 <script>
@@ -198,14 +201,126 @@ window.onload = function() {
     });
     document.getElementById('clear-btn').addEventListener('click', clearStats);
 };
+
+
+
+
+
+    function openItemPicker(slot) {
+  // Show modal and populate with relevant items (AJAX or context data)
+  // On item click, update the slot image and save selection (AJAX or form)
+}
+
+
 </script>
 
 
 
+<!-- Custom Build Box -->
+<div class="build-box custom-build-box">
+  <h2 class="build-title">Custom</h2>
+  <div class="equipment-grid">
+    <!-- Weapons -->
+    <div class="equipment-slot" id="RH1" onclick="openItemPicker('RH1', event)">
+      <div class="slot-label">Right Hand 1</div>
+      <img src="{% if custom_build.RH1 %}{{ custom_build.RH1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Right Hand 1" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="RH2" onclick="openItemPicker('RH2', event)">
+      <div class="slot-label">Right Hand 2</div>
+      <img src="{% if custom_build.RH2 %}{{ custom_build.RH2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Right Hand 2" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="LH1" onclick="openItemPicker('LH1', event)">
+      <div class="slot-label">Left Hand 1</div>
+      <img src="{% if custom_build.LH1 %}{{ custom_build.LH1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Left Hand 1" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="LH2" onclick="openItemPicker('LH2', event)">
+      <div class="slot-label">Left Hand 2</div>
+      <img src="{% if custom_build.LH2 %}{{ custom_build.LH2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Left Hand 2" class="slot-img">
+    </div>
+    <!-- Armor -->
+    <div class="equipment-slot" id="Helm" onclick="openItemPicker('Helm', event)">
+      <div class="slot-label">Helm</div>
+      <img src="{% if custom_build.Helm %}{{ custom_build.Helm.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Helm" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Chest" onclick="openItemPicker('Chest', event)">
+      <div class="slot-label">Chest</div>
+      <img src="{% if custom_build.Chest %}{{ custom_build.Chest.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Chest" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Gauntlets" onclick="openItemPicker('Gauntlets', event)">
+      <div class="slot-label">Gauntlets</div>
+      <img src="{% if custom_build.Gauntlets %}{{ custom_build.Gauntlets.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Gauntlets" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Greaves" onclick="openItemPicker('Greaves', event)">
+      <div class="slot-label">Greaves</div>
+      <img src="{% if custom_build.Greaves %}{{ custom_build.Greaves.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Greaves" class="slot-img">
+    </div>
+    <!-- Talismans -->
+    <div class="equipment-slot" id="Talisman1" onclick="openItemPicker('Talisman1', event)">
+      <div class="slot-label">Talisman 1</div>
+      <img src="{% if custom_build.Talisman1 %}{{ custom_build.Talisman1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Talisman 1" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Talisman2" onclick="openItemPicker('Talisman2', event)">
+      <div class="slot-label">Talisman 2</div>
+      <img src="{% if custom_build.Talisman2 %}{{ custom_build.Talisman2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Talisman 2" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Talisman3" onclick="openItemPicker('Talisman3', event)">
+      <div class="slot-label">Talisman 3</div>
+      <img src="{% if custom_build.Talisman3 %}{{ custom_build.Talisman3.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Talisman 3" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Talisman4" onclick="openItemPicker('Talisman4', event)">
+      <div class="slot-label">Talisman 4</div>
+      <img src="{% if custom_build.Talisman4 %}{{ custom_build.Talisman4.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Talisman 4" class="slot-img">
+    </div>
+    <!-- Spells -->
+    <div class="equipment-slot" id="Spell1" onclick="openItemPicker('Spell1', event)">
+      <div class="slot-label">Spell 1</div>
+      <img src="{% if custom_build.Spell1 %}{{ custom_build.Spell1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Spell 1" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Spell2" onclick="openItemPicker('Spell2', event)">
+      <div class="slot-label">Spell 2</div>
+      <img src="{% if custom_build.Spell2 %}{{ custom_build.Spell2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Spell 2" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Spell3" onclick="openItemPicker('Spell3', event)">
+      <div class="slot-label">Spell 3</div>
+      <img src="{% if custom_build.Spell3 %}{{ custom_build.Spell3.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Spell 3" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Spell4" onclick="openItemPicker('Spell4', event)">
+      <div class="slot-label">Spell 4</div>
+      <img src="{% if custom_build.Spell4 %}{{ custom_build.Spell4.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Spell 4" class="slot-img">
+    </div>
+    <!-- Ashes of War -->
+    <div class="equipment-slot" id="Ash_of_War1" onclick="openItemPicker('Ash_of_War1', event)">
+      <div class="slot-label">Ash of War 1</div>
+      <img src="{% if custom_build.Ash_of_War1 %}{{ custom_build.Ash_of_War1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 1" class="slot-img">
+    </div>
+    <div class="equipment-slot" id="Ash_of_War2" onclick="openItemPicker('Ash_of_War2', event)">
+      <div class="slot-label">Ash of War 2</div>
+      <img src="{% if custom_build.Ash_of_War2 %}{{ custom_build.Ash_of_War2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 2" class="slot-img">
+    </div>
+  </div>
+</div>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Suggested Build Presets -->
+<div class="suggested-builds">
 {% load static %}
 {% if builds %}
   {% for build in builds %}
@@ -239,11 +354,129 @@ window.onload = function() {
 {% else %}
   <p style="text-align:center;">No builds found.</p>
 {% endif %}
+</div>
 
 
 
 
+<!-- Item Picker Modal -->
+<div id="item-picker-modal" style="display:none; position:absolute; background:#23232b; border:2px solid #c53030; border-radius:8px; padding:20px; z-index:1000;">
+  <span id="modal-close" style="cursor:pointer;float:right;font-size:2em;">&times;</span>
+  <input type="text" id="item-search" placeholder="Search items..." style="width:100%; margin-bottom:10px; padding:8px;">
+  <div id="item-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:15px; max-height:60vh; overflow-y:auto;"></div>
+</div>
 
+<script>
+let currentSlot = null;
+
+// Map slot IDs to item types for AJAX
+function getSlotType(slotId) {
+  const typeMap = {
+    'RH1': 'weapon', 'RH2': 'weapon', 'LH1': 'weapon', 'LH2': 'weapon',
+    'Helm': 'armor', 'Chest': 'armor', 'Gauntlets': 'armor', 'Greaves': 'armor',
+    'Talisman1': 'talisman', 'Talisman2': 'talisman', 'Talisman3': 'talisman', 'Talisman4': 'talisman',
+    'Spell1': 'spell', 'Spell2': 'spell', 'Spell3': 'spell', 'Spell4': 'spell',
+    'Ash_of_War1': 'ash_of_war', 'Ash_of_War2': 'ash_of_war'
+  };
+  return typeMap[slotId] || 'other';
+}
+
+// Open the modal and load items for the slot
+function openItemPicker(slotId, event) {
+  currentSlot = slotId;
+  const modal = document.getElementById('item-picker-modal');
+  modal.style.display = 'block';
+  // Position modal near click
+  if (event) {
+    modal.style.left = event.pageX + 'px';
+    modal.style.top = event.pageY + 'px';
+  }
+  // Clear search
+  document.getElementById('item-search').value = '';
+  // Load items
+  const slotType = getSlotType(slotId);
+  loadItemsForSlot(slotType);
+}
+
+// Load items for the slot via AJAX
+async function loadItemsForSlot(itemType) {
+  const response = await fetch(`/get_items/?type=${itemType}`);
+  const items = await response.json();
+  const grid = document.getElementById('item-grid');
+  grid.innerHTML = '';
+  items.forEach(item => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'modal-item';
+    itemDiv.innerHTML = `
+      <img src="${item.image_url}" alt="${item.name}" style="width:80px; height:80px; border-radius:8px; border:2px solid #444;">
+      <div class="item-name" style="font-size:0.9em; color:#ffd700;">${item.name}</div>
+    `;
+    itemDiv.onclick = () => selectItem(item);
+    grid.appendChild(itemDiv);
+  });
+}
+
+// Filter items by search query
+document.getElementById('item-search').addEventListener('input', function() {
+  const query = this.value.toLowerCase();
+  document.querySelectorAll('#item-grid .modal-item').forEach(item => {
+    const name = item.querySelector('.item-name').textContent.toLowerCase();
+    item.style.display = name.includes(query) ? '' : 'none';
+  });
+});
+
+// Save selected item to build (AJAX)
+async function selectItem(item) {
+  const response = await fetch('/save_item_to_build/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({
+      slot: currentSlot,
+      item_id: item.id
+    })
+  });
+  if (response.ok) {
+    // Update UI
+    const slot = document.getElementById(currentSlot);
+    slot.querySelector('img').src = item.image_url;
+    slot.querySelector('.slot-label').textContent = item.name;
+    document.getElementById('item-picker-modal').style.display = 'none';
+    window.location.reload(); // Optional: reload to update Django context
+  }
+}
+
+// Helper to get CSRF token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Close modal via close button
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('item-picker-modal').style.display = 'none';
+});
+
+// Optional: Close modal when clicking outside of it
+document.addEventListener('mousedown', function(event) {
+  const modal = document.getElementById('item-picker-modal');
+  if (modal.style.display === 'block' && !modal.contains(event.target) && !event.target.classList.contains('equipment-slot')) {
+    modal.style.display = 'none';
+  }
+});
+</script>
 
 
 </body>

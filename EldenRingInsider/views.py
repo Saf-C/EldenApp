@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+
 from django.core.paginator import Paginator
 from collections import OrderedDict, defaultdict
 
 from unicodedata import category
 
-from .models import Item, Build
+from .models import Item, Build, EquipmentSlot
 from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET, require_POST
 
 
 def item_list(request):
@@ -87,6 +89,93 @@ def builds_view(request):
         ('AshOfWar1', 'Ash of War 1'), ('AshOfWar2', 'Ash of War 2'),
     ]
     return render(request, 'builds.html', {'builds': builds, 'query': query, 'slot_order': slot_order})
+
+
+def build_page(request):
+    # Retrieve all relevant items for each slot type
+    weapons = Item.objects.filter(type__in=['katana', 'great_katana', 'greatsword', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'dagger', 'twinblade','axe','great_axe','hammer','great_hammer','flail','spear','short_spear','great_spear','halberd','heavy_thrusting_sword','thrusting_sword','claw','fists','backhand_blade','reaper','whip',])
+    armors = Item.objects.filter(type='armor')
+    talismans = Item.objects.filter(type='talisman')
+    spells = Item.objects.filter(type='spell')
+    ash_of_wars = Item.objects.filter(type='ash_of_war')
+
+    # Get session build data
+    session_build = request.session.get('custom_build', {})
+
+    # Create context with actual item objects
+    custom_build = {}
+    for slot, item_id in session_build.items():
+        try:
+            custom_build[slot] = Item.objects.get(id=item_id)
+        except Item.DoesNotExist:
+            custom_build[slot] = None
+
+
+    # Retrieve or initialize the user's custom build (session or user profile)
+    custom_build = get_or_create_custom_build(request.user)
+
+    return render(request, 'build.html', {
+        'weapons': weapons,
+        'armors': armors,
+        'talismans': talismans,
+        'custom_build': custom_build,
+        'spells': spells,
+        'ash_of_wars': ash_of_wars,
+        # ... other context
+    })
+
+def get_or_create_custom_build(user):
+    # If user is authenticated, you could use user.custom_build
+    # For demo, just return a dict with empty slots
+    return {
+        'RH1': None,
+        'RH2': None,
+        'LH1': None,
+        'LH2': None,
+        'Helm': None,
+        'Chest': None,
+        'Gauntlets': None,
+        'Greaves': None,
+        'Talisman1': None,
+        'Talisman2': None,
+        'Talisman3': None,
+        'Talisman4': None,
+        'Spell1': None,
+        'Spell2': None,
+        'Spell3': None,
+        'Spell4': None,
+        'Ash_of_War1': None,
+        'Ash_of_War2': None,
+    }
+
+@require_GET
+def get_items(request):
+    item_type = request.GET.get('type')
+    # Map slot type to item types in your DB
+    type_map = {
+        'weapon': ['katana', 'great_katana', 'greatsword', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'dagger', 'twinblade','axe','great_axe','hammer','great_hammer','flail','spear','short_spear','great_spear','halberd','heavy_thrusting_sword','thrusting_sword','claw','fists','backhand_blade','reaper','whip'],
+        'armor': ['armor'],
+        'talisman': ['talisman'],
+        'spell': ['spell'],
+        'ash_of_war': ['ash_of_war'],
+    }
+    types = type_map.get(item_type, [])
+    items = Item.objects.filter(type__in=types).values('id', 'name', 'image_url')
+    return JsonResponse(list(items), safe=False)
+
+
+
+@require_POST
+def save_item_to_build(request):
+    slot = request.POST.get('slot')
+    item_id = request.POST.get('item_id')
+
+    # Store in session (or save to database if logged in)
+    build = request.session.get('custom_build', {})
+    build[slot] = item_id
+    request.session['custom_build'] = build
+
+    return JsonResponse({'status': 'success'})
 
 
 def item_json_view(request, item_id):
