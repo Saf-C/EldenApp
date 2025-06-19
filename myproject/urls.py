@@ -28,6 +28,7 @@ urlpatterns = [
     path('item/<int:item_id>/', views.item_detail, name='item_detail'),
     path('builds/', views.builds_view, name='builds'),
     path('get_items/', views.get_items, name='get_items'),
+    path('save_item_to_build/', views.save_item_to_build, name='save_item_to_build'),
     path('items/<int:item_id>/json/', views.item_json_view, name='item_json'), # For preview items on builds
 
 ]

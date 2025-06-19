@@ -9,6 +9,9 @@ from .models import Item, Build, EquipmentSlot
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 
 
 def item_list(request):
@@ -112,7 +115,7 @@ def build_page(request):
 
 
     # Retrieve or initialize the user's custom build (session or user profile)
-    custom_build = get_or_create_custom_build(request.user)
+    #custom_build = get_or_create_custom_build(request.user)
 
     return render(request, 'build.html', {
         'weapons': weapons,
@@ -165,12 +168,13 @@ def get_items(request):
 
 
 
+@csrf_exempt  # Only for development; use proper CSRF in production!
 @require_POST
 def save_item_to_build(request):
-    slot = request.POST.get('slot')
-    item_id = request.POST.get('item_id')
+    data = json.loads(request.body)
+    slot = data.get('slot')
+    item_id = data.get('item_id')
 
-    # Store in session (or save to database if logged in)
     build = request.session.get('custom_build', {})
     build[slot] = item_id
     request.session['custom_build'] = build

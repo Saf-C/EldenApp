@@ -332,20 +332,23 @@ window.onload = function() {
       <div class="equipment-grid">
         {% for slot_code, slot_label in slot_order %}
           {% with slot=build.equipment_slots.all|get_slot:slot_code %}
-            <div class="equipment-slot">
-              <div class="slot-label">{{ slot_label }}</div>
-              {% if slot and slot.item %}
-                <a href="{% url 'item_detail' slot.item.id %}">
-                  <img src="{{ slot.item.image_url|default:'/static/placeholder.jpg' }}" alt="{{ slot.item.name }}" class="slot-img">
-                </a>
-                <div class="slot-tooltip">
-                  <strong>{{ slot.item.name }}</strong><br>
-                  {{ slot.item.description|truncatechars:60 }}
-                </div>
-              {% else %}
-                <img src="{% static 'placeholder.jpg' %}" alt="Empty" class="slot-img empty">
-              {% endif %}
-            </div>
+           <div class="equipment-slot" title="{% if slot and slot.item %}{{ slot.item.name }}{% endif %}">
+  {% if slot and slot.item %}
+    <a href="{% url 'item_detail' slot.item.id %}">
+      <img src="{{ slot.item.image_url|default:'/static/placeholder.jpg' }}" alt="{{ slot.item.name }}" class="slot-img">
+    </a>
+    <div class="item-name">{{ slot.item.name }}</div>
+    <div class="slot-tooltip">
+      <strong>{{ slot.item.name }}</strong><br>
+      {{ slot.item.description|truncatechars:60 }}
+    </div>
+  {% else %}
+    <div class="slot-label">{{ slot_label }}</div>
+    <img src="{% static 'placeholder.jpg' %}" alt="Empty" class="slot-img empty">
+  {% endif %}
+</div>
+
+
           {% endwith %}
         {% endfor %}
       </div>
@@ -439,14 +442,14 @@ async function selectItem(item) {
     })
   });
   if (response.ok) {
-    // Update UI
+    // Update the slot image and label immediately
     const slot = document.getElementById(currentSlot);
     slot.querySelector('img').src = item.image_url;
     slot.querySelector('.slot-label').textContent = item.name;
     document.getElementById('item-picker-modal').style.display = 'none';
-    window.location.reload(); // Optional: reload to update Django context
   }
 }
+
 
 // Helper to get CSRF token
 function getCookie(name) {

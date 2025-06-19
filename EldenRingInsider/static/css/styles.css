@@ -427,21 +427,44 @@
 
         .equipment-grid {
             display: grid;
-            grid-template-columns: repeat(4, 80px);
-            grid-template-rows: repeat(4, 80px);
+            grid-template-columns: repeat(4, 110px);
+            grid-auto-rows: 120px;
             gap: 18px;
             justify-content: center;
         }
 
         .equipment-slot {
-            position: relative;
+            width: 110px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             text-align: center;
+            overflow: hidden;
         }
 
-        .slot-label {
+        .slot-label, .item-name {
+            width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 0.85em;
             color: #ffd700;
-            margin-bottom: 4px;
+            margin: 4px 0 0 0;
+            cursor: default;
+        }
+
+
+
+        .equipment-slot img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #1e1e2e;
+            border: 2px solid #444;
+            margin: 0 auto 4px auto;
         }
 
         .slot-img {
