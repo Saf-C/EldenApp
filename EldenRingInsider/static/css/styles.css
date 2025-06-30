@@ -264,6 +264,17 @@
             font-size: 1.1em;
         }
 
+
+        /* Suggested Builds based off stats */
+        .suggested-build-box {
+            background: #23232b;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 0 auto 32px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 24px 0 #000a;
+        }
+
         /* Custom Build Box */
 .custom-build-box {
     border: 2px solid #c53030 !important;

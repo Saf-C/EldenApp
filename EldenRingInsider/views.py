@@ -96,7 +96,14 @@ def builds_view(request):
 
 def build_page(request):
     # Retrieve all relevant items for each slot type
-    weapons = Item.objects.filter(type__in=['katana', 'great_katana', 'greatsword', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'dagger', 'twinblade','axe','great_axe','hammer','great_hammer','flail','spear','short_spear','great_spear','halberd','heavy_thrusting_sword','thrusting_sword','claw','fists','backhand_blade','reaper','whip',])
+    weapons = Item.objects.filter(type__in=[ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+        'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
+        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+        'backhand_blade', 'reaper', 'whip',
+        'small_shield', 'medium_shield', 'greatshield',
+        'staff', 'glintstone_staff', 'sacred_seal',
+        'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
+        'torch',])
     armors = Item.objects.filter(type='armor')
     talismans = Item.objects.filter(type='talisman')
     spells = Item.objects.filter(type='spell')
@@ -117,15 +124,73 @@ def build_page(request):
     # Retrieve or initialize the user's custom build (session or user profile)
     #custom_build = get_or_create_custom_build(request.user)
 
-    return render(request, 'build.html', {
-        'weapons': weapons,
-        'armors': armors,
-        'talismans': talismans,
-        'custom_build': custom_build,
-        'spells': spells,
-        'ash_of_wars': ash_of_wars,
-        # ... other context
+
+@require_POST
+def recommend_build(request):
+    stats = json.loads(request.body)
+    # weapons
+    all_weapons = Item.objects.filter(
+        type__in=[ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+                'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
+                'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+                'backhand_blade', 'reaper', 'whip',
+                'small_shield', 'medium_shield', 'greatshield',
+                'staff', 'glintstone_staff', 'sacred_seal',
+                'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
+                'torch',]
+    )
+    weapons = []
+    for item in all_weapons:
+        req = item.required_stats or {}
+        # Only include items where all required stats are met
+        if all(stats.get(k, 99) >= v for k, v in req.items()):
+            weapons.append(item)
+    weapons = weapons[:5]
+
+    # armors
+    all_armors = Item.objects.filter(type='armor')
+    armors = []
+    for item in all_armors:
+        req = item.required_stats or {}
+        if all(stats.get(k, 99) >= v for k, v in req.items()):
+            armors.append(item)
+    armors = armors[:5]
+
+    # talismans
+    all_talismans = Item.objects.filter(type='talisman')
+    talismans = []
+    for item in all_talismans:
+        req = item.required_stats or {}
+        if all(stats.get(k, 99) >= v for k, v in req.items()):
+            talismans.append(item)
+    talismans = talismans[:5]
+
+    # spells
+    all_spells = Item.objects.filter(type__in=['spell', 'incantation'])
+    spells = []
+    for item in all_spells:
+        req = item.required_stats or {}
+        if all(stats.get(k, 99) >= v for k, v in req.items()):
+            spells.append(item)
+    spells = spells[:5]
+
+    # ash_of_wars
+    all_ash_of_wars = Item.objects.filter(type='ash_of_wars')
+    ash_of_wars = []
+    for item in all_ash_of_wars:
+        req = item.required_stats or {}
+        if all(stats.get(k, 99) >= v for k, v in req.items()):
+            ash_of_wars.append(item)
+    ash_of_wars = ash_of_wars[:5]
+
+    return JsonResponse({
+        'weapons': [{'id': w.id, 'name': w.name, 'image_url': w.image_url} for w in weapons],
+        'armors': [{'id': a.id, 'name': a.name, 'image_url': a.image_url} for a in armors],
+        'talismans': [{'id': a.id, 'name': a.name, 'image_url': a.image_url} for a in talismans],
+        'spells': [{'id': s.id, 'name': s.name, 'image_url': s.image_url} for s in spells],
+        'ash_of_wars': [{'id': s.id, 'name': s.name, 'image_url': s.image_url} for s in ash_of_wars],
     })
+
 
 def get_or_create_custom_build(user):
     # If user is authenticated, you could use user.custom_build
@@ -156,7 +221,14 @@ def get_items(request):
     item_type = request.GET.get('type')
     # Map slot type to item types in your DB
     type_map = {
-        'weapon': ['katana', 'great_katana', 'greatsword', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'dagger', 'twinblade','axe','great_axe','hammer','great_hammer','flail','spear','short_spear','great_spear','halberd','heavy_thrusting_sword','thrusting_sword','claw','fists','backhand_blade','reaper','whip'],
+        'weapon': [ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+        'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
+        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+        'backhand_blade', 'reaper', 'whip',
+        'small_shield', 'medium_shield', 'greatshield',
+        'staff', 'glintstone_staff', 'sacred_seal',
+        'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
+        'torch',],
         'armor': ['armor'],
         'talisman': ['talisman'],
         'spell': ['spell'],
@@ -180,6 +252,21 @@ def save_item_to_build(request):
     request.session['custom_build'] = build
 
     return JsonResponse({'status': 'success'})
+
+@require_POST
+def save_as_preset(request):
+    data = json.loads(request.body)
+    name = data.get('name')
+    description = data.get('description', '')
+    custom_build = request.session.get('custom_build', {})
+    # Create a new Build object and EquipmentSlot objects for each slot
+    return JsonResponse({'status': 'success'})
+
+@require_POST
+def clear_custom_build(request):
+    request.session['custom_build'] = {}
+    return JsonResponse({'status': 'success'})
+
 
 
 def item_json_view(request, item_id):

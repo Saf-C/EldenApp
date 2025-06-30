@@ -87,7 +87,7 @@
 
 
 <div class="build-class">
-    <h2 style="text-align:center;">Customize Your Build Stats</h2>
+    <h2 style="text-align:center;">Customise Your Build Stats</h2>
     <div id="stat-editor" style="max-width:400px;margin:0 auto;">
         <div class="stat-row">
             <span class="stat-label">Level</span>
@@ -142,8 +142,106 @@
             <button class="stat-btn" onclick="changeStat('arcane', 1)">&#62;</button>
         </div>
     </div>
+     <button
+  id="suggest-btn"
+  class="stat-btn"
+  style="  bottom:0; margin: 24px 32px; color:#ffd700; font-weight:bold; padding:6px 18px; border-radius:6px; background:#23232b; border:none;"
+>
+  Suggest Build
+</button>
 </div>
+
 </div>
+
+<div id="suggested-build-box" class="build-box suggested-build-box" style="display:none; margin-top:30px;">
+  <h2 class="build-title">Suggested Build</h2>
+  <div class="equipment-grid" id="suggested-equipment-grid"></div>
+</div>
+
+
+      <script>
+
+          function addSlot(slotLabel, item) {
+    const grid = document.getElementById('suggested-equipment-grid');
+    grid.innerHTML += `
+        <div class="equipment-slot">
+            <div class="slot-label">${slotLabel}</div>
+            <img src="${item ? item.image_url : '/static/img/empty.png'}" alt="${item ? item.name : ''}" class="slot-img">
+            <div class="item-name">${item ? item.name : ''}</div>
+        </div>
+    `;
+}
+
+async function suggestBuild() {
+    const stats = {
+        vigor: parseInt(document.getElementById('vigor-value').textContent),
+        mind: parseInt(document.getElementById('mind-value').textContent),
+        endurance: parseInt(document.getElementById('endurance-value').textContent),
+        strength: parseInt(document.getElementById('strength-value').textContent),
+        dexterity: parseInt(document.getElementById('dexterity-value').textContent),
+        intelligence: parseInt(document.getElementById('intelligence-value').textContent),
+        faith: parseInt(document.getElementById('faith-value').textContent),
+        arcane: parseInt(document.getElementById('arcane-value').textContent),
+    };
+    const response = await fetch('/recommend_build/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify(stats)
+    });
+    if (response.ok) {
+        const data = await response.json();
+        showSuggestedBuild(data);
+    }
+}
+
+function showSuggestedBuild(data) {
+    const grid = document.getElementById('suggested-equipment-grid');
+    grid.innerHTML = '';
+
+    // Weapons (first 2 for RH1/RH2, next 2 for LH1/LH2)
+    addSlot('Right Hand 1', data.weapons[0]);
+    addSlot('Right Hand 2', data.weapons[1]);
+    addSlot('Left Hand 1', data.weapons[2]);
+    addSlot('Left Hand 2', data.weapons[3]);
+
+    // Armor
+    addSlot('Helm', data.armors[0]);
+    addSlot('Chest', data.armors[1]);
+    addSlot('Gauntlets', data.armors[2]);
+    addSlot('Greaves', data.armors[3]);
+
+    // Talismans
+    addSlot('Talisman 1', data.talismans[0]);
+    addSlot('Talisman 2', data.talismans[1]);
+    addSlot('Talisman 3', data.talismans[2]);
+    addSlot('Talisman 4', data.talismans[3]);
+
+    // Spells
+    addSlot('Spell 1', data.spells[0]);
+    addSlot('Spell 2', data.spells[1]);
+    addSlot('Spell 3', data.spells[2]);
+    addSlot('Spell 4', data.spells[3]);
+
+    // Ashes of War
+    addSlot('Ash of War 1', data.ash_of_wars[0]);
+    addSlot('Ash of War 2', data.ash_of_wars[1]);
+
+
+    document.getElementById('suggested-build-box').style.display = 'block';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('suggest-btn').addEventListener('click', suggestBuild);
+});
+
+      </script>
+  </div>
+</div>
+
+
 
 <script>
 const minStat = 1;
@@ -201,11 +299,6 @@ window.onload = function() {
     });
     document.getElementById('clear-btn').addEventListener('click', clearStats);
 };
-
-
-
-
-
     function openItemPicker(slot) {
   // Show modal and populate with relevant items (AJAX or context data)
   // On item click, update the slot image and save selection (AJAX or form)
@@ -216,9 +309,25 @@ window.onload = function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Custom Build Box -->
 <div class="build-box custom-build-box">
   <h2 class="build-title">Custom</h2>
+    <button onclick="saveAsPreset()" class="save-button" style="color:#ffd700; font-weight:bold; padding: 6px 12px;border-radius: 6px; background: #23232b;">Save as Preset</button>
+
+    <button onclick="clearCustomBuild()" class="clear-button" style="color:#ffd700; font-weight:bold;padding: 6px 12px;  border-radius: 6px; background: #23232b;">Clear Build</button>
+
   <div class="equipment-grid">
     <!-- Weapons -->
     <div class="equipment-slot" id="RH1" onclick="openItemPicker('RH1', event)">
@@ -479,6 +588,36 @@ document.addEventListener('mousedown', function(event) {
     modal.style.display = 'none';
   }
 });
+
+async function saveAsPreset() {
+  const response = await fetch('/save_as_preset/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({
+      name: prompt('Enter a name for your preset:'),
+      description: prompt('Enter a description (optional):') || '',
+    })
+  });
+  if (response.ok) {
+    window.location.reload();
+  }
+}
+
+    async function clearCustomBuild() {
+  const response = await fetch('/clear_custom_build/', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+  });
+  if (response.ok) {
+    window.location.reload();
+  }
+}
+
 </script>
 
 
