@@ -48,9 +48,13 @@ class ItemType(models.TextChoices):
     # Torches
     TORCH = 'torch', 'Torch'
 
-
+    #Armor
+    HEAD = 'head', 'Head'
+    BODY = 'body', 'Body'
+    ARMS = 'arms', 'Arms'
+    LEGS = 'legs', 'Legs'
     # Other item types
-    ARMOR = 'armor', 'Armor'
+
     TALISMAN = 'talisman', 'Talisman'
     SPELL = 'spell', 'Spell'
     ASH_OF_WAR = 'ash_of_war', 'Ash of War'
@@ -63,6 +67,8 @@ class Item(models.Model):
     type = models.CharField(max_length=32, choices=ItemType.choices, default=ItemType.OTHER)
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True, null=True)
+    # For talismans: 'spell_boost', 'fp_boost', 'faith_boost', etc.
+    effects = models.CharField(max_length=64, blank=True, null=True)
     icon = models.CharField(max_length=100, blank=True, null=True)
     location = models.TextField(blank=True, null=True)
 
@@ -71,7 +77,12 @@ class Item(models.Model):
     scaling = models.JSONField(null=True, blank=True)
     attack_power = models.JSONField(null=True, blank=True)
     defense = models.JSONField(null=True, blank=True)
-    spell_requirements = models.JSONField(null=True, blank=True)
+    fp_cost = models.IntegerField(default=0, blank=True, null=True)
+
+
+    # For armor: 'mage', 'melee', 'light', 'heavy', etc.
+    role = models.CharField(max_length=32, blank=True, null=True)
+
 
     class Meta:
         indexes = [

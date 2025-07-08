@@ -128,68 +128,192 @@ def build_page(request):
 @require_POST
 def recommend_build(request):
     stats = json.loads(request.body)
-    # weapons
+    # Determine build type based on highest stat
+    main_stat = max(stats, key=stats.get)
+    is_mage = main_stat == 'intelligence'
+    is_faith = main_stat == 'faith'
+    is_strength = main_stat == 'strength'
+    is_dexterity = main_stat == 'dexterity'
+
+    # Helper function to filter and sort items
+    def filter_and_sort(items, stat_key=None, preferred_types=None):
+        # Filter for required stats
+        filtered = []
+        for item in items:
+            req = item.required_stats or {}
+            if all(stats.get(k, 99) >= v for k, v in req.items()):
+                filtered.append(item)
+        # Filter for preferred types if provided
+        if preferred_types:
+            filtered = [item for item in filtered if item.type in preferred_types]
+        # Sort by scaling with main stat if provided
+        if stat_key and all(hasattr(i, 'scaling') for i in filtered):
+            filtered.sort(key=lambda x: x.scaling.get(stat_key, 0), reverse=True)
+        return filtered[:5]
+
+    # --- WEAPONS ---
     all_weapons = Item.objects.filter(
-        type__in=[ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
-                'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
-                'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
-                'backhand_blade', 'reaper', 'whip',
-                'small_shield', 'medium_shield', 'greatshield',
-                'staff', 'glintstone_staff', 'sacred_seal',
-                'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
-                'torch',]
+        type__in=[
+            'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+            'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
+            'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+            'backhand_blade', 'reaper', 'whip',
+            'small_shield', 'medium_shield', 'greatshield',
+            'staff', 'glintstone_staff', 'sacred_seal',
+            'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
+            'torch',
+        ]
     )
-    weapons = []
-    for item in all_weapons:
-        req = item.required_stats or {}
-        # Only include items where all required stats are met
-        if all(stats.get(k, 99) >= v for k, v in req.items()):
-            weapons.append(item)
-    weapons = weapons[:5]
+    if is_mage:
+        weapons = filter_and_sort(all_weapons, 'intelligence', ['staff', 'glintstone_staff'])
+    elif is_faith:
+        weapons = filter_and_sort(all_weapons, 'faith', ['sacred_seal'])
+    elif is_strength:
+        weapons = filter_and_sort(all_weapons, 'strength', ['greatsword', 'colossal_sword', 'colossal_weapon', 'great_axe', 'great_hammer'])
+    elif is_dexterity:
+        weapons = filter_and_sort(all_weapons, 'dexterity', ['katana', 'great_katana', 'twinblade', 'dagger', 'curved_sword'])
+    else:
+        weapons = filter_and_sort(all_weapons)
 
-    # armors
-    all_armors = Item.objects.filter(type='armor')
-    armors = []
-    for item in all_armors:
-        req = item.required_stats or {}
-        if all(stats.get(k, 99) >= v for k, v in req.items()):
-            armors.append(item)
-    armors = armors[:5]
+    # --- ARMOR ---
+    all_armors = Item.objects.filter(type__in=['head', 'body', 'arms', 'legs'])
+    selected_armors = pick_armor_by_stats(all_armors, stats)
 
-    # talismans
-    all_talismans = Item.objects.filter(type='talisman')
-    talismans = []
-    for item in all_talismans:
-        req = item.required_stats or {}
-        if all(stats.get(k, 99) >= v for k, v in req.items()):
-            talismans.append(item)
-    talismans = talismans[:5]
+    head = selected_armors['head']
+    body = selected_armors['body']
+    arms = selected_armors['arms']
+    legs = selected_armors['legs']
 
-    # spells
+
+
+    # --- SPELLS ---
     all_spells = Item.objects.filter(type__in=['spell', 'incantation'])
-    spells = []
-    for item in all_spells:
-        req = item.required_stats or {}
-        if all(stats.get(k, 99) >= v for k, v in req.items()):
-            spells.append(item)
-    spells = spells[:5]
+    if is_mage:
+        spells = filter_and_sort(all_spells, 'intelligence', ['spell'])
+    elif is_faith:
+        spells = filter_and_sort(all_spells, 'faith', ['incantation'])
+    else:
+        spells = filter_and_sort(all_spells)
 
-    # ash_of_wars
-    all_ash_of_wars = Item.objects.filter(type='ash_of_wars')
-    ash_of_wars = []
-    for item in all_ash_of_wars:
-        req = item.required_stats or {}
-        if all(stats.get(k, 99) >= v for k, v in req.items()):
-            ash_of_wars.append(item)
-    ash_of_wars = ash_of_wars[:5]
+    # --- TALISMANS ---
+    all_talismans = Item.objects.filter(type='talisman')
+
+    for t in all_talismans:
+        print(t.name, t.effects)
+
+    is_mage = ...  # True if Intelligence build
+    is_faith = ...  # True if Faith build
+    is_strength = ...  # True if Strength build
+    is_dexterity = ...  # True if Dexterity build
+    is_arcane = ...  # True if Arcane build
+    is_tank = ... #True if Vigor Build
+
+    if is_mage:
+        # Intelligence-focused: sorceries and FP
+        talismans = [t for t in all_talismans if t.effects in [
+            'spell_boost', 'magic_spell_boost', 'charge_spell_boost', 'spell_duration_boost',
+            'fp_boost', 'intelligence_boost'
+        ]]
+    elif is_faith:
+        # Faith-focused: incantations and FP
+        talismans = [t for t in all_talismans if t.effects in [
+            'incantation_boost', 'fire_incantation_boost', 'lightning_incantation_boost',
+            'charge_incantation_boost', 'spell_duration_boost', 'faith_boost', 'fp_boost'
+        ]]
+    elif is_strength:
+        # Strength-focused: melee and survivability
+        talismans = [t for t in all_talismans if t.effects in [
+            'strength_boost', 'health_boost', 'stamina_boost', 'equip_load_boost'
+        ]]
+    elif is_dexterity:
+        # Dexterity-focused: speed and survivability
+        talismans = [t for t in all_talismans if t.effects in [
+            'dexterity_boost', 'health_boost', 'stamina_boost', 'equip_load_boost', 'casting_speed_boost'
+        ]]
+    elif is_arcane:
+        # Arcane-focused: item discovery and status
+        talismans = [t for t in all_talismans if t.effects in [
+            'arcane_boost', 'item_discovery_boost', 'status_effect_boost'
+        ]]
+    elif is_tank:
+        # Tank/general: health, stamina, equip load, defense
+        talismans = [t for t in all_talismans if t.effects in [
+            'health_boost', 'stamina_boost', 'equip_load_boost', 'defense_boost'
+        ]]
+    else:
+        # Fallback: all talismans
+        talismans = all_talismans
+
+    # Further filter by required stats, then limit to top 4
+    talismans = [t for t in talismans if all(stats.get(k, 99) >= v for k, v in (t.required_stats or {}).items())][:4]
+
+    # --- ASHES OF WAR ---
+    all_ashes = Item.objects.filter(type='ash_of_war')
+    # (No stat-based filtering for ashes)
+    ashes = filter_and_sort(all_ashes)
+
+
 
     return JsonResponse({
         'weapons': [{'id': w.id, 'name': w.name, 'image_url': w.image_url} for w in weapons],
-        'armors': [{'id': a.id, 'name': a.name, 'image_url': a.image_url} for a in armors],
-        'talismans': [{'id': a.id, 'name': a.name, 'image_url': a.image_url} for a in talismans],
+        'head': [{'id': head.id, 'name': head.name, 'image_url': head.image_url}] if head else [],
+        'body': [{'id': body.id, 'name': body.name, 'image_url': body.image_url}] if body else [],
+        'arms': [{'id': arms.id, 'name': arms.name, 'image_url': arms.image_url}] if arms else [],
+        'legs': [{'id': legs.id, 'name': legs.name, 'image_url': legs.image_url}] if legs else [],
         'spells': [{'id': s.id, 'name': s.name, 'image_url': s.image_url} for s in spells],
-        'ash_of_wars': [{'id': s.id, 'name': s.name, 'image_url': s.image_url} for s in ash_of_wars],
+        'talismans': [{'id': t.id, 'name': t.name, 'image_url': t.image_url} for t in talismans],
+        'ash_of_wars': [{'id': ash.id, 'name': ash.name, 'image_url': ash.image_url} for ash in ashes],
     })
+
+def pick_armor_by_stats(armors, stats):
+    """
+    Selects the best armor for each slot based on build stats.
+    Returns a dict: {'head': best_head, 'body': best_body, 'arms': best_arms, 'legs': best_legs}
+    """
+    # Determine main stat(s)
+    main_stat = max(stats, key=stats.get)
+    endurance = stats.get('endurance', 10)
+    intelligence = stats.get('intelligence', 10)
+    mind = stats.get('mind', 10)
+    strength = stats.get('strength', 10)
+    dexterity = stats.get('dexterity', 10)
+
+    # Define scoring for each armor piece
+    def score(armor):
+        s = 0
+        # Endurance: prefer heavier armor
+        if endurance >= 30:
+            s += (armor.weight or 0) * 2
+        elif endurance >= 20:
+            s += (armor.weight or 0) * 1.2
+        else:
+            s += max(0, 20 - (armor.weight or 0))  # prefer lighter if low endurance
+
+        # Intelligence/Mind: prefer magic defense/effects
+        if intelligence >= 30 or mind >= 30:
+            if armor.effects and 'magic' in armor.effects.lower():
+                s += 15
+            s += (armor.defense.get('magic', 0) if armor.defense else 0)
+
+        # Strength/Dexterity: prefer physical defense/poise
+        if strength >= 30 or dexterity >= 30:
+            if armor.effects and ('poise' in armor.effects.lower() or 'physical' in armor.effects.lower()):
+                s += 15
+            s += (armor.defense.get('physical', 0) if armor.defense else 0)
+            # If you have a poise stat, add it here as well
+
+        return s
+
+    # For each slot, pick the best armor by score
+    selected = {}
+    for slot in ['head', 'body', 'arms', 'legs']:
+        candidates = [a for a in armors if a.type == slot]
+        if candidates:
+            best = max(candidates, key=score)
+            selected[slot] = best
+        else:
+            selected[slot] = None
+    return selected
 
 
 def get_or_create_custom_build(user):
@@ -216,28 +340,26 @@ def get_or_create_custom_build(user):
         'Ash_of_War2': None,
     }
 
+
+
 @require_GET
 def get_items(request):
     item_type = request.GET.get('type')
-    # Map slot type to item types in your DB
-    type_map = {
-        'weapon': [ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+    if item_type in ['head', 'body', 'arms', 'legs', 'talisman', 'spell', 'ash_of_war']:
+        items = Item.objects.filter(type=item_type).values('id', 'name', 'image_url')
+    elif item_type == 'weapon':
+        weapon_types = [ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
         'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
         'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
         'backhand_blade', 'reaper', 'whip',
         'small_shield', 'medium_shield', 'greatshield',
         'staff', 'glintstone_staff', 'sacred_seal',
         'ballista', 'crossbow', 'bow', 'light_bow', 'greatbow',
-        'torch',],
-        'armor': ['armor'],
-        'talisman': ['talisman'],
-        'spell': ['spell'],
-        'ash_of_war': ['ash_of_war'],
-    }
-    types = type_map.get(item_type, [])
-    items = Item.objects.filter(type__in=types).values('id', 'name', 'image_url')
+        'torch',]
+        items = Item.objects.filter(type__in=weapon_types).values('id', 'name', 'image_url')
+    else:
+        items = Item.objects.none()
     return JsonResponse(list(items), safe=False)
-
 
 
 @csrf_exempt  # Only for development; use proper CSRF in production!

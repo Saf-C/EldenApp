@@ -208,10 +208,10 @@ function showSuggestedBuild(data) {
     addSlot('Left Hand 2', data.weapons[3]);
 
     // Armor
-    addSlot('Helm', data.armors[0]);
-    addSlot('Chest', data.armors[1]);
-    addSlot('Gauntlets', data.armors[2]);
-    addSlot('Greaves', data.armors[3]);
+    addSlot('Helm', data.head[0]);
+    addSlot('Chest', data.body[0]);
+    addSlot('Gauntlets', data.arms[0]);
+    addSlot('Greaves', data.legs[0]);
 
     // Talismans
     addSlot('Talisman 1', data.talismans[0]);
@@ -485,7 +485,7 @@ let currentSlot = null;
 function getSlotType(slotId) {
   const typeMap = {
     'RH1': 'weapon', 'RH2': 'weapon', 'LH1': 'weapon', 'LH2': 'weapon',
-    'Helm': 'armor', 'Chest': 'armor', 'Gauntlets': 'armor', 'Greaves': 'armor',
+    'Helm': 'head', 'Chest': 'body', 'Gauntlets': 'arms', 'Greaves': 'legs',
     'Talisman1': 'talisman', 'Talisman2': 'talisman', 'Talisman3': 'talisman', 'Talisman4': 'talisman',
     'Spell1': 'spell', 'Spell2': 'spell', 'Spell3': 'spell', 'Spell4': 'spell',
     'Ash_of_War1': 'ash_of_war', 'Ash_of_War2': 'ash_of_war'

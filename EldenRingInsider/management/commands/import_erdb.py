@@ -8,10 +8,10 @@ from EldenRingInsider.models import Item, ItemType
 # Map ERDB categories to your ItemType choices
 ERDB_TO_ITEMTYPE = {
     # Armor
-    "Head": ItemType.ARMOR,
-    "Body": ItemType.ARMOR,
-    "Arms": ItemType.ARMOR,
-    "Legs": ItemType.ARMOR,
+    "Head": ItemType.HEAD,
+    "Body": ItemType.BODY,
+    "Arms": ItemType.ARMS,
+    "Legs": ItemType.LEGS,
 
     # Shields
     "Small Shield": ItemType.SMALL_SHIELD,
@@ -81,6 +81,8 @@ class Command(BaseCommand):
             "spells.json",
         ]
 
+
+
         for filename in target_files:
             file_path = os.path.join(data_dir, filename)
 
@@ -90,25 +92,32 @@ class Command(BaseCommand):
 
                 items = list(raw_data.values()) if isinstance(raw_data, dict) else raw_data
 
-
-
-
                 for data in items:
                     erdb_id = str(data.get("id"))
-                    erdb_category = data.get("category")  # Should be the specific category from ERDB
+
+                    # Get and clean category
+                    erdb_category = data.get("category", "").strip()
+
+                    # Map to item type
                     item_type = ERDB_TO_ITEMTYPE.get(erdb_category, ItemType.OTHER)
 
-                    # Diagnosing categorisation of items
-                    erdb_category = data.get("category")
-                    item_type = ERDB_TO_ITEMTYPE.get(erdb_category, ItemType.OTHER)
+                    # Debug unmapped categories
                     if item_type == ItemType.OTHER:
-                        print(f"Unmapped category: {erdb_category}")
+                        print(f"⚠️ Unmapped category: '{erdb_category}' for item: {data.get('name')}")
 
-                    # Extract stats as needed (example placeholders)
+                    # Extract stats
                     scaling = data.get("scaling", {})
                     attack_power = data.get("attack_power", {})
                     defense = data.get("defense", {})
 
+                    # Handle effects
+                    effects = None
+                    if item_type in [ItemType.TALISMAN, ItemType.SPELL, ItemType.ASH_OF_WAR]:
+                        effects_data = data.get("effects", [])
+                        if effects_data and isinstance(effects_data, list):
+                            effects = effects_data[0] if effects_data else None
+
+                    # Get or create item
                     obj, created = Item.objects.get_or_create(
                         erdb_id=erdb_id,
                         defaults={
@@ -118,17 +127,27 @@ class Command(BaseCommand):
                             "image_url": f"https://example.com/images/{data.get('icon', '')}.png",
                             "icon": data.get("icon", ""),
                             "weight": data.get("weight", 0),
+                            "effects": effects,
                             "required_stats": data.get("requirements", {}),
                             "scaling": scaling,
                             "attack_power": attack_power,
                             "defense": defense,
-                            "spell_requirements": data.get("effects", {}),
+                            "fp_cost": data.get("fp_cost", 0),
                         }
                     )
+
+                    # Update existing items
                     if not created:
-                        # Only update the type/category!
-                        obj.type = item_type
-                        obj.save(update_fields=["type"])
+                        update_fields = []
+                        if obj.type != item_type:
+                            obj.type = item_type
+                            update_fields.append("type")
+                        if obj.effects != effects:
+                            obj.effects = effects
+                            update_fields.append("effects")
+
+                        if update_fields:
+                            obj.save(update_fields=update_fields)
 
                 self.stdout.write(self.style.SUCCESS(f"✅ {filename} imported ({len(items)} items)"))
 
