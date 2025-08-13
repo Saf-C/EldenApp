@@ -13,6 +13,32 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 
+# --- Helper mapping and functions ---
+
+ATTRIBUTE_TO_EFFECT = {
+    "Maximum Equip Load": "equip_load_boost",
+    "Maximum Health": "health_boost",
+    "Maximum Focus (FP)": "fp_boost",
+    "Maximum Stamina": "stamina_boost",
+    "Sorcery Potency": "spell_boost",
+    "Incantation Potency": "incantation_boost",
+    "Magic Attack Power": "magic_spell_boost",
+    "Fire Attack Power": "fire_incantation_boost",
+    "Lightning Attack Power": "lightning_incantation_boost",
+    "Charged Spell Power": "charge_spell_boost",
+    "Charged Incantation Power": "charge_incantation_boost",
+    "Spell Duration": "spell_duration_boost",
+    "Casting Speed": "casting_speed_boost",
+    "Strength": "strength_boost",
+    "Dexterity": "dexterity_boost",
+    "Intelligence": "intelligence_boost",
+    "Faith": "faith_boost",
+    "Arcane": "arcane_boost",
+    "Item Discovery": "item_discovery_boost",
+    "Status Effect Buildup": "status_effect_boost",
+    "Defense": "defense_boost",
+    # Add more as needed
+}
 
 def item_list(request):
     query = request.GET.get('q', '')
@@ -75,6 +101,17 @@ def item_list(request):
 def item_detail(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return render(request, 'item_detail.html', {'item': item})
+
+
+
+def attribute_to_effect(attribute):
+    return ATTRIBUTE_TO_EFFECT.get(attribute)
+
+def talisman_has_effect(talisman, effect_names):
+    return any(
+        attribute_to_effect(e.get("attribute")) in effect_names
+        for e in (talisman.effects or [])
+    )
 
 def builds_view(request):
     query = request.GET.get('q', '')
@@ -209,39 +246,32 @@ def recommend_build(request):
     is_tank = ... #True if Vigor Build
 
     if is_mage:
-        # Intelligence-focused: sorceries and FP
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'spell_boost', 'magic_spell_boost', 'charge_spell_boost', 'spell_duration_boost',
             'fp_boost', 'intelligence_boost'
-        ]]
+        ])]
     elif is_faith:
-        # Faith-focused: incantations and FP
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'incantation_boost', 'fire_incantation_boost', 'lightning_incantation_boost',
             'charge_incantation_boost', 'spell_duration_boost', 'faith_boost', 'fp_boost'
-        ]]
+        ])]
     elif is_strength:
-        # Strength-focused: melee and survivability
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'strength_boost', 'health_boost', 'stamina_boost', 'equip_load_boost'
-        ]]
+        ])]
     elif is_dexterity:
-        # Dexterity-focused: speed and survivability
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'dexterity_boost', 'health_boost', 'stamina_boost', 'equip_load_boost', 'casting_speed_boost'
-        ]]
+        ])]
     elif is_arcane:
-        # Arcane-focused: item discovery and status
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'arcane_boost', 'item_discovery_boost', 'status_effect_boost'
-        ]]
+        ])]
     elif is_tank:
-        # Tank/general: health, stamina, equip load, defense
-        talismans = [t for t in all_talismans if t.effects in [
+        talismans = [t for t in all_talismans if talisman_has_effect(t, [
             'health_boost', 'stamina_boost', 'equip_load_boost', 'defense_boost'
-        ]]
+        ])]
     else:
-        # Fallback: all talismans
         talismans = all_talismans
 
     # Further filter by required stats, then limit to top 4
@@ -381,8 +411,16 @@ def save_as_preset(request):
     name = data.get('name')
     description = data.get('description', '')
     custom_build = request.session.get('custom_build', {})
-    # Create a new Build object and EquipmentSlot objects for each slot
+    build = Build.objects.create(name=name, description=description)
+    for slot_name, item_id in custom_build.items():
+        if item_id:
+            EquipmentSlot.objects.create(
+                build=build,
+                slot_name=slot_name,
+                item_id=item_id
+            )
     return JsonResponse({'status': 'success'})
+
 
 @require_POST
 def clear_custom_build(request):

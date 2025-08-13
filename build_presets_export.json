@@ -1,0 +1,300 @@
+[
+  {
+    "build_id": 1,
+    "name": "Strength",
+    "description": "",
+    "slots": {
+      "RH1": {
+        "item_id": 660,
+        "item_name": "Bloodhound's Fang",
+        "item_type": "curved_sword"
+      },
+      "RH2": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "LH1": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "LH2": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "Helms": {
+        "item_id": 41,
+        "item_name": "Bull-Goat Helm",
+        "item_type": "head"
+      },
+      "Chest Armor": {
+        "item_id": 42,
+        "item_name": "Bull-Goat Armor",
+        "item_type": "body"
+      },
+      "Gauntlets": {
+        "item_id": 43,
+        "item_name": "Bull-Goat Gauntlets",
+        "item_type": "arms"
+      },
+      "Greaves": {
+        "item_id": 44,
+        "item_name": "Bull-Goat Greaves",
+        "item_type": "legs"
+      },
+      "Talisman1": {
+        "item_id": 1006,
+        "item_name": "Perfumer's Talisman",
+        "item_type": "talisman"
+      },
+      "Talisman2": {
+        "item_id": 982,
+        "item_name": "Millicent's Prosthesis",
+        "item_type": "talisman"
+      },
+      "Talisman3": {
+        "item_id": 989,
+        "item_name": "Spear Talisman",
+        "item_type": "talisman"
+      },
+      "Talisman4": {
+        "item_id": 1011,
+        "item_name": "Old Lord's Talisman",
+        "item_type": "talisman"
+      },
+      "Spell1": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "Spell2": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "Spell3": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "Spell4": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      },
+      "AshOfWar1": {
+        "item_id": 3,
+        "item_name": "Ash of War: Mighty Shot",
+        "item_type": "ash_of_war"
+      },
+      "AshOfWar2": {
+        "item_id": null,
+        "item_name": null,
+        "item_type": null
+      }
+    }
+  },
+  {
+    "build_id": 2,
+    "name": "Dexterity",
+    "description": "Multiplied by threeeeeeeee",
+    "slots": {
+      "RH1": {
+        "item_id": 668,
+        "item_name": "Nagakiba",
+        "item_type": "katana"
+      },
+      "Helms": {
+        "item_id": 182,
+        "item_name": "Radahn's Redmane Helm",
+        "item_type": "head"
+      },
+      "Chest Armor": {
+        "item_id": 183,
+        "item_name": "Radahn's Lion Armor",
+        "item_type": "body"
+      },
+      "Gauntlets": {
+        "item_id": 184,
+        "item_name": "Radahn's Gauntlets",
+        "item_type": "arms"
+      },
+      "Greaves": {
+        "item_id": 185,
+        "item_name": "Radahn's Greaves",
+        "item_type": "legs"
+      },
+      "Talisman1": {
+        "item_id": 1000,
+        "item_name": "Lord of Blood's Exultation",
+        "item_type": "talisman"
+      },
+      "Talisman2": {
+        "item_id": 981,
+        "item_name": "Shard of Alexander",
+        "item_type": "talisman"
+      },
+      "Talisman3": {
+        "item_id": 966,
+        "item_name": "Green Turtle Talisman",
+        "item_type": "talisman"
+      },
+      "Talisman4": {
+        "item_id": 942,
+        "item_name": "Crimson Amber Medallion",
+        "item_type": "talisman"
+      },
+      "AshOfWar1": {
+        "item_id": 1069,
+        "item_name": "Ash of War: Double Slash",
+        "item_type": "ash_of_war"
+      },
+      "Spell1": {
+        "item_id": 1199,
+        "item_name": "Bloodflame Blade",
+        "item_type": "spell"
+      }
+    }
+  },
+  {
+    "build_id": 3,
+    "name": "Dual Magma Blade build",
+    "description": "Dual Magma Blade build that has an ash of war for the main damage, as well as the light attacks at close combat to deal large amounts of fire damage. This could also be a counter attack playstyle using the inherent magma blade.",
+    "slots": {
+      "RH1": {
+        "item_id": 649,
+        "item_name": "Magma Blade",
+        "item_type": "curved_sword"
+      },
+      "LH1": {
+        "item_id": 649,
+        "item_name": "Magma Blade",
+        "item_type": "curved_sword"
+      },
+      "Helm": {
+        "item_id": 182,
+        "item_name": "Radahn's Redmane Helm",
+        "item_type": "head"
+      },
+      "Chest": {
+        "item_id": 183,
+        "item_name": "Radahn's Lion Armor",
+        "item_type": "body"
+      },
+      "Gauntlets": {
+        "item_id": 184,
+        "item_name": "Radahn's Gauntlets",
+        "item_type": "arms"
+      },
+      "Greaves": {
+        "item_id": 185,
+        "item_name": "Radahn's Greaves",
+        "item_type": "legs"
+      },
+      "Talisman1": {
+        "item_id": 985,
+        "item_name": "Fire Scorpion Charm",
+        "item_type": "talisman"
+      },
+      "Talisman2": {
+        "item_id": 988,
+        "item_name": "Ritual Sword Talisman",
+        "item_type": "talisman"
+      },
+      "Talisman3": {
+        "item_id": 980,
+        "item_name": "Warrior Jar Shard",
+        "item_type": "talisman"
+      },
+      "Talisman4": {
+        "item_id": 1018,
+        "item_name": "Dragoncrest Greatshield Talisman",
+        "item_type": "talisman"
+      },
+      "Spell1": {
+        "item_id": 1222,
+        "item_name": "Golden Vow",
+        "item_type": "spell"
+      },
+      "Spell2": {
+        "item_id": 1051,
+        "item_name": "Flame, Grant Me Strength",
+        "item_type": "spell"
+      }
+    }
+  },
+  {
+    "build_id": 4,
+    "name": "Icerind Hatchet build",
+    "description": "Icerind Hatchet main way of dealing damage is the Hoarfrost stomp ash of war as well as its base moveset to maximise the cold attunement. The combat style is versatile as it can range from medium to close range.",
+    "slots": {
+      "RH1": {
+        "item_id": 722,
+        "item_name": "Icerind Hatchet",
+        "item_type": "axe"
+      },
+      "LH1": {
+        "item_id": 649,
+        "item_name": "Magma Blade",
+        "item_type": "curved_sword"
+      },
+      "Helm": {
+        "item_id": 58,
+        "item_name": "Black Knife Hood",
+        "item_type": "head"
+      },
+      "Chest": {
+        "item_id": 59,
+        "item_name": "Black Knife Armor",
+        "item_type": "body"
+      },
+      "Gauntlets": {
+        "item_id": 60,
+        "item_name": "Black Knife Gauntlets",
+        "item_type": "arms"
+      },
+      "Greaves": {
+        "item_id": 61,
+        "item_name": "Black Knife Greaves",
+        "item_type": "legs"
+      },
+      "Talisman1": {
+        "item_id": 982,
+        "item_name": "Millicent's Prosthesis",
+        "item_type": "talisman"
+      },
+      "Talisman2": {
+        "item_id": 991,
+        "item_name": "Winged Sword Insignia",
+        "item_type": "talisman"
+      },
+      "Talisman3": {
+        "item_id": 980,
+        "item_name": "Warrior Jar Shard",
+        "item_type": "talisman"
+      },
+      "Talisman4": {
+        "item_id": 966,
+        "item_name": "Green Turtle Talisman",
+        "item_type": "talisman"
+      },
+      "Spell1": {
+        "item_id": 1051,
+        "item_name": "Flame, Grant Me Strength",
+        "item_type": "spell"
+      },
+      "Spell2": {
+        "item_id": 1222,
+        "item_name": "Golden Vow",
+        "item_type": "spell"
+      },
+      "Ash_of_War1": {
+        "item_id": 6,
+        "item_name": "Ash of War: Hoarfrost Stomp",
+        "item_type": "ash_of_war"
+      }
+    }
+  }
+]

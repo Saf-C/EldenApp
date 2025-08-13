@@ -32,6 +32,7 @@ urlpatterns = [
     path('get_items/', views.get_items, name='get_items'),
     path('recommend_build/', views.recommend_build, name='recommend_build'),
     path('save_item_to_build/', views.save_item_to_build, name='save_item_to_build'),
+    path('save_as_preset/', views.save_as_preset, name='save_as_preset'),
     path('clear_custom_build/', views.clear_custom_build, name='clear_custom_build'),
     path('items/<int:item_id>/json/', views.item_json_view, name='item_json'),
 ]
