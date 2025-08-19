@@ -44,9 +44,9 @@ def item_list(request):
     query = request.GET.get('q', '')
     # Use database values for ordering
     item_type_order = [
-        'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+        'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'greatsword',
         'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
-        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'thrusting_sword', 'claw', 'fists',
         'backhand_blade', 'reaper', 'whip',
         'small_shield', 'medium_shield', 'greatshield',
         'staff', 'glintstone_staff', 'sacred_seal',
@@ -133,9 +133,9 @@ def builds_view(request):
 
 def build_page(request):
     # Retrieve all relevant items for each slot type
-    weapons = Item.objects.filter(type__in=[ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+    weapons = Item.objects.filter(type__in=[ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'greatsword',
         'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
-        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+        'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'thrusting_sword', 'claw', 'fists',
         'backhand_blade', 'reaper', 'whip',
         'small_shield', 'medium_shield', 'greatshield',
         'staff', 'glintstone_staff', 'sacred_seal',
@@ -191,9 +191,9 @@ def recommend_build(request):
     # --- WEAPONS ---
     all_weapons = Item.objects.filter(
         type__in=[
-            'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+            'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'greatsword',
             'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
-            'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
+            'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'thrusting_sword', 'claw', 'fists',
             'backhand_blade', 'reaper', 'whip',
             'small_shield', 'medium_shield', 'greatshield',
             'staff', 'glintstone_staff', 'sacred_seal',
@@ -378,7 +378,7 @@ def get_items(request):
     if item_type in ['head', 'body', 'arms', 'legs', 'talisman', 'spell', 'ash_of_war']:
         items = Item.objects.filter(type=item_type).values('id', 'name', 'image_url')
     elif item_type == 'weapon':
-        weapon_types = [ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword',
+        weapon_types = [ 'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'greatsword',
         'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
         'short_spear', 'great_spear', 'halberd', 'heavy_thrusting_sword', 'claw', 'fists',
         'backhand_blade', 'reaper', 'whip',
