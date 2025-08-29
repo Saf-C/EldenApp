@@ -108,10 +108,21 @@ def attribute_to_effect(attribute):
     return ATTRIBUTE_TO_EFFECT.get(attribute)
 
 def talisman_has_effect(talisman, effect_names):
-    return any(
-        attribute_to_effect(e.get("attribute")) in effect_names
-        for e in (talisman.effects or [])
-    )
+    effects = talisman.effects
+    if not effects:
+        return False
+    # If effects is a string, just check substring match
+    if isinstance(effects, str):
+        return any(name.lower() in effects.lower() for name in effect_names)
+    # If effects is a list, and each element should be a dict (old logic)
+    if isinstance(effects, list):
+        return any(
+            isinstance(e, dict) and attribute_to_effect(e.get("attribute")) in effect_names
+            for e in effects
+        )
+    # Defensive: if it's something else
+    return False
+
 
 def builds_view(request):
     query = request.GET.get('q', '')
