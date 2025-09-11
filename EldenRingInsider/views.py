@@ -139,7 +139,11 @@ def builds_view(request):
         ('Spell3', 'Spell 3'), ('Spell4', 'Spell 4'),
         ('AshOfWar1', 'Ash of War 1'), ('AshOfWar2', 'Ash of War 2'),
     ]
-    return render(request, 'builds.html', {'builds': builds, 'query': query, 'slot_order': slot_order})
+    paginator = Paginator(builds, 12)  # 12 builds per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'builds.html', {'builds': page_obj, 'page_obj': page_obj, 'slot_order': slot_order})
 
 
 def build_page(request):

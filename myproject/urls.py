@@ -24,6 +24,7 @@ from django.urls import path, include
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.item_list, name='item_list'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('save_as_preset/', views.save_as_preset, name='save_as_preset'),
     path('clear_custom_build/', views.clear_custom_build, name='clear_custom_build'),
     path('items/<int:item_id>/json/', views.item_json_view, name='item_json'),
+    path('chatbot/', include('chatbot.urls')),
 ]
 
 

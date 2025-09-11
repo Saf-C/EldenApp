@@ -10,7 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Builds - Elden Ring Insider</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
 
 
 
@@ -347,13 +350,13 @@ window.onload = function() {
       <img src="{% if custom_build.LH2 %}{{ custom_build.LH2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Left Hand 2" class="slot-img">
     </div>
     <!-- Armor -->
-    <div class="equipment-slot" id="Helm" onclick="openItemPicker('Helm', event)">
-      <div class="slot-label">Helm</div>
-      <img src="{% if custom_build.Helm %}{{ custom_build.Helm.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Helm" class="slot-img">
+    <div class="equipment-slot" id="Helms" onclick="openItemPicker('Helms', event)">
+      <div class="slot-label">Helms</div>
+      <img src="{% if custom_build.Helms %}{{ custom_build.Helms.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Helms" class="slot-img">
     </div>
-    <div class="equipment-slot" id="Chest" onclick="openItemPicker('Chest', event)">
-      <div class="slot-label">Chest</div>
-      <img src="{% if custom_build.Chest %}{{ custom_build.Chest.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Chest" class="slot-img">
+    <div class="equipment-slot" id="Chest Armor" onclick="openItemPicker('Chest Armor', event)">
+      <div class="slot-label">Chest Armor</div>
+      <img src="{% if custom_build.Chest_Armor %}{{ custom_build.Chest_Armor.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Chest Armor" class="slot-img">
     </div>
     <div class="equipment-slot" id="Gauntlets" onclick="openItemPicker('Gauntlets', event)">
       <div class="slot-label">Gauntlets</div>
@@ -398,13 +401,13 @@ window.onload = function() {
       <img src="{% if custom_build.Spell4 %}{{ custom_build.Spell4.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Spell 4" class="slot-img">
     </div>
     <!-- Ashes of War -->
-    <div class="equipment-slot" id="Ash_of_War1" onclick="openItemPicker('Ash_of_War1', event)">
+    <div class="equipment-slot" id="AshOfWar1" onclick="openItemPicker('AshOfWar1', event)">
       <div class="slot-label">Ash of War 1</div>
-      <img src="{% if custom_build.Ash_of_War1 %}{{ custom_build.Ash_of_War1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 1" class="slot-img">
+      <img src="{% if custom_build.AshOfWar1 %}{{ custom_build.AshOfWar1.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 1" class="slot-img">
     </div>
-    <div class="equipment-slot" id="Ash_of_War2" onclick="openItemPicker('Ash_of_War2', event)">
+    <div class="equipment-slot" id="AshOfWar2" onclick="openItemPicker('AshOfWar2', event)">
       <div class="slot-label">Ash of War 2</div>
-      <img src="{% if custom_build.Ash_of_War2 %}{{ custom_build.Ash_of_War2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 2" class="slot-img">
+      <img src="{% if custom_build.AshOfWar2 %}{{ custom_build.AshOfWar2.image_url }}{% else %}{% static 'img/empty.png' %}{% endif %}" alt="Ash of War 2" class="slot-img">
     </div>
   </div>
 </div>
@@ -468,6 +471,36 @@ window.onload = function() {
 {% endif %}
 </div>
 
+<!-- Pagination -->
+<div class="pagination-container" style="text-align: center; margin: 20px 0;">
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 
 
 
@@ -485,10 +518,10 @@ let currentSlot = null;
 function getSlotType(slotId) {
   const typeMap = {
     'RH1': 'weapon', 'RH2': 'weapon', 'LH1': 'weapon', 'LH2': 'weapon',
-    'Helm': 'head', 'Chest': 'body', 'Gauntlets': 'arms', 'Greaves': 'legs',
+    'Helms': 'head', 'Chest Armor': 'body', 'Gauntlets': 'arms', 'Greaves': 'legs',
     'Talisman1': 'talisman', 'Talisman2': 'talisman', 'Talisman3': 'talisman', 'Talisman4': 'talisman',
     'Spell1': 'spell', 'Spell2': 'spell', 'Spell3': 'spell', 'Spell4': 'spell',
-    'Ash_of_War1': 'ash_of_war', 'Ash_of_War2': 'ash_of_war'
+    'AshOfWar1': 'ash_of_war', 'AshOfWar2': 'ash_of_war'
   };
   return typeMap[slotId] || 'other';
 }

@@ -1,0 +1,18 @@
+{
+  "strength": ["claymore", "colossal sword", "colossal weapon", "greatsword", "greatbow", "greatshield", "hammer", "axe", "golem", "giant crusher", "death's poker", "fallingstar beast jaw", "onyx's lord greatsword"],
+  "dex": ["katana", "uchigatana", "bloodhound fang", "nagakiba", "rivers of blood"],
+  "faith": ["seal", "faith talisman", "incantation", "golden vow"],
+  "int": ["staff", "magic", "sorcery", "moonveil", "dark moon"],
+  "bleed": ["rivers of blood", "bloody helice", "eleonora's poleblade", "mohgs", "occult", "arcane", "uchigatana", "nagakiba", "wakazashi", "reduvia"],
+  "holy":["winged scythe", "black knife", "eclipse shotel", "ordovis", "envoy's longhorn", "maliketh's black blade", "envoy's greathorn", "sacred relic sword", "erdtree bow"],
+  "lightning": ["bolt of gransax", "dragon king's cragblade", "dragon greatclaw", "veteran's prosthesis"],
+  "fire": ["blasphemous blade", "death's poker", "magma blade", "sword of night and flame", "eleonora's poleblade", "godslayer's greatsword", "mohgwyn's spear", "rivers of blood", "cranial vessel candlestand", "giant's red braid", "grafted dragon", "magma wyrm's scalesword", "vyke's war spear"],
+  "magic": ["dark moon greatsword", "moonveil", "sword of night and flame", "full moon crossbow", "helphen's steeple", "death ritual spear"],
+  "poison": ["venomous fang", "serpent bow", "serpentbone blade"],
+  "frostbite": ["dark moon greatsword", "icering hatchet", "frozen needle"],
+  "scarlet rot": ["rotten crystal staff", "antspur rapier", "rotten staff", "scorpion's stinger", "rotten battle hammer"],
+  "sleep": ["sword of st. trina", "st. trina's torch"],
+  "madness": ["frenzied flame seal", "vyke's war spear"],
+  "sorcery boosting": ["carian regal scepter", "rotten crystal staff", "gelmir glintstone staff", "staff of guilty", "meteorite staff", "staff of loss", "carian glintstone staff", "crystal staff", "digger's staff", "prince of death's staff", "albinauric staff"],
+  "incantation boosting": ["dragon communion seal", "frenzied flame seal", "giant's seal", "godslayer's seal", "gravel stone seal", "golden order seal", "clawmark seal", "fingerprint seal"]
+}
