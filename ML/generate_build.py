@@ -2,13 +2,16 @@
 import pandas as pd
 import numpy as np
 import os
+import re
 
 # Use a dynamic path that is independent of where the script is executed
 current_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(current_dir, "../ml_presets_V5.6.csv")
 
-# Load the dataset using the corrected path
-raw_df = pd.read_csv(csv_path)
+try:
+    raw_df = pd.read_csv(csv_path)
+except FileNotFoundError:
+    raise FileNotFoundError(f"CSV file not found at: {csv_path}")
 
 slots = {
     "weapons": ["RH1", "RH2", "LH1", "LH2"],
@@ -20,11 +23,10 @@ slots = {
 
 
 def uniq(values):
-    vals = [v for v in values if pd.notna(v)]
+    vals = [str(v) for v in values if pd.notna(v)]
     return sorted(set(vals))
 
 
-# Build catalogs
 weapon_catalog = uniq(pd.concat([raw_df[c] for c in slots["weapons"]], ignore_index=True))
 armor_catalog = {k: uniq(raw_df[k]) for k in slots["armor"]}
 talisman_catalog = uniq(pd.concat([raw_df[c] for c in slots["talismans"]], ignore_index=True))
@@ -32,7 +34,6 @@ spell_catalog = uniq(pd.concat([raw_df[c] for c in slots["spells"]], ignore_inde
 ash_catalog = uniq(pd.concat([raw_df[c] for c in slots["ashes"]], ignore_index=True))
 
 
-# ---- TAGGING HELPERS ----
 def tag_weapon(name: str) -> set[str]:
     n = str(name).lower()
     tags = set()
@@ -159,7 +160,6 @@ def tag_armor(name: str) -> set[str]:
     return tags
 
 
-# Precompute tag maps
 weapon_tags = {w: tag_weapon(w) for w in weapon_catalog}
 ash_tags = {a: tag_ash(a) for a in ash_catalog}
 talisman_tags = {t: tag_talisman(t) for t in talisman_catalog}
@@ -172,27 +172,18 @@ rng = np.random.default_rng(7)
 def pick_best(catalog, tags_map, query_tags: set[str], k: int = 1, used_items: set = None):
     used_items = used_items if used_items is not None else set()
     scored = []
-
-    if not catalog:
-        return []
-
-    # First, filter out any used items
-    filtered_catalog = [item for item in catalog if item not in used_items]
-
+    if not catalog: return []
+    filtered_catalog = [str(item) for item in catalog if pd.notna(item) and str(item) not in used_items]
     for item in filtered_catalog:
         item_tags = tags_map.get(item, set())
         score = len(query_tags & item_tags)
-
-        # Add a bonus for highly-relevant items
-        if "bleed" in query_tags and "lord of blood's exultation" in str(item).lower():
-            score += 10
-        if "strength" in query_tags and "shard of alexander" in str(item).lower():
-            score += 10
-
-        if item_tags.isdisjoint(query_tags) and query_tags:
-            score = 0
-        else:
-            score += rng.random() * 0.01
+        if "bleed" in query_tags and "lord of blood's exultation" in item.lower():
+            score += 5
+        if "strength" in query_tags and "shard of alexander" in item.lower():
+            score += 5
+        if "int" in query_tags and "graven-mass talisman" in item.lower():
+            score += 5
+        score += rng.random() * 0.01
         scored.append((score, item))
     scored.sort(reverse=True)
     return [x[1] for x in scored[:k]]
@@ -200,92 +191,63 @@ def pick_best(catalog, tags_map, query_tags: set[str], k: int = 1, used_items: s
 
 def generate_build(base_items=None, query: str = ""):
     q = query.lower()
-    query_tags = set(t for t in ["strength", "dex", "int", "faith", "bleed"] if t in q)
-    used_items = set()
+    query_tags = {t for t in ["strength", "dex", "int", "faith", "bleed"] if t in q}
+    used = set()
 
-    build = base_items.copy() if base_items else {
-        "RH1": None, "RH2": None, "LH1": None, "LH2": None,
-        "Helms": None, "Chest Armor": None, "Gauntlets": None, "Greaves": None,
-        "Talisman1": None, "Talisman2": None, "Talisman3": None, "Talisman4": None,
-        "Spell1": None, "Spell2": None, "Spell3": None, "Spell4": None,
-        "AshOfWar1": None, "AshOfWar2": None,
-    }
+    build = {slot: None for cat in slots.values() for slot in cat}
+    if base_items: build.update(base_items)
 
-    # Find and handle a specific weapon mention
-    weapon_mention = next((w for w in weapon_catalog if w.lower() in q), None)
+    # --- Weapon locking
+    weapon_mention = next((w for w in weapon_catalog if w and w.lower() in q), None)
     if weapon_mention:
         build["RH1"] = weapon_mention
-        used_items.add(weapon_mention)
-        # Adjust tags based on the weapon found
+        used.add(weapon_mention)
         query_tags |= tag_weapon(weapon_mention)
 
-    # --- Weapons ---
+    # Weapons
     if not build["RH1"]:
-        chosen_wpn = pick_best(weapon_catalog, weapon_tags, query_tags, k=2, used_items=used_items)
-        if chosen_wpn:
-            build["RH1"] = chosen_wpn[0]
-            used_items.add(chosen_wpn[0])
-            if len(chosen_wpn) > 1 and "dual" in q:
-                build["LH1"] = chosen_wpn[1]
-                used_items.add(chosen_wpn[1])
+        picks = pick_best(weapon_catalog, weapon_tags, query_tags, k=2, used_items=used)
+        if picks:
+            build["RH1"] = picks[0]; used.add(picks[0])
+            if len(picks) > 1 and "dual" in q: build["LH1"] = picks[1]
 
-    # --- Ashes ---
-    # Only pick Ashes of War if the weapon isn't a staff or seal
-    is_caster = any(t in query_tags for t in ["int", "faith", "caster"])
-    if not is_caster:
-        chosen_ashes = pick_best(ash_catalog, ash_tags, query_tags, k=2)
-        for i, a in enumerate(chosen_ashes, start=1):
+    # Ashes (only if not caster)
+    if not any(t in query_tags for t in ["int", "faith", "caster"]):
+        for i, a in enumerate(pick_best(ash_catalog, ash_tags, query_tags, k=2), start=1):
             build[f"AshOfWar{i}"] = a
-            used_items.add(a)
 
-    # --- Spells ---
-    chosen_spells = pick_best(spell_catalog, spell_tags, query_tags, k=4, used_items=used_items)
-    for i, s in enumerate(chosen_spells, start=1):
+    # Spells
+    for i, s in enumerate(pick_best(spell_catalog, spell_tags, query_tags, k=4, used_items=used), start=1):
         build[f"Spell{i}"] = s
-        used_items.add(s)
 
-    # --- Talismans ---
-    chosen_tals = pick_best(talisman_catalog, talisman_tags, query_tags, k=4, used_items=used_items)
-    for i, t in enumerate(chosen_tals, start=1):
+    # Talismans
+    for i, t in enumerate(pick_best(talisman_catalog, talisman_tags, query_tags, k=4, used_items=used), start=1):
         build[f"Talisman{i}"] = t
-        used_items.add(t)
 
-    # --- Armor ---
-    armor_sets = []
-    for i, (helm, chest, gauntlets, greaves) in raw_df[[c for c in slots["armor"]]].iterrows():
-        set_tags = tag_armor(str(helm)) | tag_armor(str(chest)) | tag_armor(str(gauntlets)) | tag_armor(str(greaves))
-        if query_tags.issubset(set_tags):
-            armor_sets.append([helm, chest, gauntlets, greaves])
+    # Armor sets
+    set_found = False
+    for _, row in raw_df[slots["armor"]].iterrows():
+        set_tags = tag_armor(str(row["Helms"])) | tag_armor(str(row["Chest Armor"]))
+        if query_tags & set_tags:
+            build.update({c: row[c] for c in slots["armor"]})
+            set_found = True
+            break
+    if not set_found:
+        for armor_slot in slots["armor"]:
+            picks = pick_best(armor_catalog[armor_slot], armor_tags, query_tags, k=1, used_items=used)
+            if picks: build[armor_slot] = picks[0]
 
-    if armor_sets:
-        chosen_set = armor_sets[0]
-        build["Helms"] = chosen_set[0]
-        build["Chest Armor"] = chosen_set[1]
-        build["Gauntlets"] = chosen_set[2]
-        build["Greaves"] = chosen_set[3]
-    else:
-        # Fallback to general best armor if no matching set found
-        for slot in slots["armor"]:
-            chosen = pick_best(armor_catalog.get(slot, []), armor_tags, query_tags, k=1, used_items=used_items)
-            if chosen:
-                build[slot] = chosen[0]
+    # Auto add staff/seal if spells but no tool
+    if any(build[s] for s in slots["spells"]):
+        if not any(build.get(w) and isinstance(build[w], str) and ("seal" in build[w].lower() or "staff" in build[w].lower()) for w in slots["weapons"]):
 
-    # --- Off-hand Seal Rule ---
-    # Check if spells were chosen, but no staff/seal is equipped
-    has_spells = any(build.get(s) for s in slots["spells"])
-    has_casting_tool = any("seal" in str(build.get(w)).lower() or "staff" in str(build.get(w)).lower() for w in
-                           ["RH1", "LH1", "RH2", "LH2"])
+            seal = pick_best([w for w in weapon_catalog if "seal" in str(w).lower() or "staff" in str(w).lower()],
+                             weapon_tags, query_tags, k=1)
+            if seal: build["LH2"] = seal[0]
 
-    if has_spells and not has_casting_tool:
-        chosen_seal = pick_best([s for s in weapon_catalog if "seal" in str(s).lower() or "staff" in str(s).lower()],
-                                weapon_tags, query_tags, k=1)
-        if chosen_seal:
-            if not build["LH2"]:
-                build["LH2"] = chosen_seal[0]
-            elif not build["RH2"]:
-                build["RH2"] = chosen_seal[0]
 
-    return build
+    return {slot: (item if pd.notna(item) else None) for slot, item in build.items()}
+
 
 
 if __name__ == "__main__":
@@ -293,7 +255,6 @@ if __name__ == "__main__":
     new_build_1 = generate_build(query="strength bleed")
     for slot, item in new_build_1.items():
         print(f"  {slot}: {item}")
-
     print("\n--- Example: Generating a new 'int' build from scratch ---")
     new_build_2 = generate_build(query="int")
     for slot, item in new_build_2.items():
