@@ -48,9 +48,7 @@ INSTALLED_APPS = [
     'EldenRingInsider',
     'chatbot',
 ]
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = '/static/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -137,9 +135,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STATIC_URL = '/static/'
 
-import os
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'EldenRingInsider/static'),
 ]
@@ -148,3 +147,8 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
