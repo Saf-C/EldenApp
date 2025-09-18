@@ -1,6 +1,5 @@
 # myproject/EldenRingInsider/views.py
 import json
-import os
 import random
 from collections import OrderedDict, defaultdict
 
@@ -8,7 +7,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
 from .models import Item, Build, EquipmentSlot
@@ -16,7 +14,7 @@ from .models import Item, Build, EquipmentSlot
 # ------------------------------
 # Small configuration / helpers
 # ------------------------------
-# map display attribute names -> internal keys (if you use them)
+# map display attribute names
 ATTRIBUTE_TO_EFFECT = {
     "Maximum Equip Load": "equip_load_boost",
     "Maximum Health": "health_boost",
@@ -53,7 +51,7 @@ ALL_WEAPON_TYPES = [
     'torch',
 ]
 
-# Preferred weapon types by main stat (tune this list to your DB types)
+# Preferred weapon types by main stat
 PREFERRED_WEAPON_TYPES = {
     'strength': ['greatsword', 'colossal_sword', 'colossal_weapon', 'great_axe', 'great_hammer', 'hammer', 'axe'],
     'dexterity': ['katana', 'great_katana', 'twinblade', 'curved_sword', 'straightsword', 'dagger'],
@@ -272,9 +270,8 @@ def build_page(request):
 
 # ------------------------------
 # Stat-only recommendation endpoint
-# (Drop-in for your stat slider front-end)
 # ------------------------------
-@csrf_exempt  # dev only; use proper CSRF in production!
+
 @require_POST
 def recommend_build(request):
     """
@@ -369,7 +366,7 @@ def recommend_build(request):
     chosen_weapons = pick_items(all_weapons_qs, stats, prefer_types=preferred_types, prefer_name_tokens=prefer_tokens, limit=8)
 
     # ensure we provide 4 weapon slots (RH1, RH2, LH1, LH2) for the front-end
-    # if not enough weapons, duplicate sensible choices (but avoid identical duplicates when possible)
+    # if not enough weapons, duplicate sensible choices
     weapons_result = []
     used_names = set()
     i = 0
@@ -557,7 +554,7 @@ def get_items(request):
     return JsonResponse(list(items), safe=False)
 
 
-@csrf_exempt
+
 @require_POST
 def save_item_to_build(request):
     data = json.loads(request.body.decode('utf-8') if isinstance(request.body, (bytes, bytearray)) else request.body)

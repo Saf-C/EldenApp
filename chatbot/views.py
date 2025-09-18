@@ -2,11 +2,10 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
 from ML.recommend_plus import recommend_build
 from ML.generate_build import generate_build, weapon_catalog
 import re
-import traceback
+
 
 
 def parse_query(query: str):
@@ -34,10 +33,9 @@ def parse_query(query: str):
 
     return must_have, boost
 
-@csrf_exempt
+
 @require_POST
 def chatbot_api(request):
-    import traceback
 
     try:
         if request.method == "GET":
@@ -61,5 +59,4 @@ def chatbot_api(request):
 
     except Exception:
         print("=== Chatbot Exception ===")
-        traceback.print_exc()
-        raise
+        return JsonResponse({"status": "error", "message": "An internal server error occurred."}, status=500)
