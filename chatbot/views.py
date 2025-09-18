@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from ML.recommend_plus import recommend_build
-from ML.generate_build import generate_build
+from ML.generate_build import generate_build, weapon_catalog
 import re
 import traceback
 
@@ -16,11 +16,16 @@ def parse_query(query: str):
     keywords = re.findall(r'\b\w+\b', query.lower())
 
     # Simple logic to determine a 'must_have' and 'boost' list
-    # For a more advanced system, you'd use a more sophisticated NLP approach
     must_have = [word for word in keywords if
                  word in ['strength', 'bleed', 'dex', 'faith', 'sorcery', 'incantation', 'magic']]
 
     boost = {}
+    # Explicit item detection with fuzzy match
+    for item in weapon_catalog:
+        if item.lower() in query.lower():
+            must_have.append(item)
+            boost[item] = boost.get(item, 0) + 5
+
     for word in keywords:
         if word in ['strength', 'bleed', 'dex', 'faith', 'int', 'arcane']:
             boost[word] = boost.get(word, 0) + 2  # Add a boost to these keywords
@@ -30,6 +35,7 @@ def parse_query(query: str):
     return must_have, boost
 
 @csrf_exempt
+@require_POST
 def chatbot_api(request):
     import traceback
 
@@ -56,4 +62,4 @@ def chatbot_api(request):
     except Exception:
         print("=== Chatbot Exception ===")
         traceback.print_exc()
-        raise  # Let Django show full debug page if DEBUG=True
+        raise

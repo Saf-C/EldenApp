@@ -69,11 +69,13 @@
     <div class="container">
         <h1>{{ item.name }}</h1>
         <div class="item-details">
+            <a href="{{ item.image_url }}" target="_blank" rel="noopener noreferrer">
             <img src="{{ item.image_url }}" alt="{{ item.name }}">
+            </a>
             <p><strong>Type:</strong> {{ item.type }}</p>
             <p><strong>Weight:</strong> {{ item.weight }}</p>
             <p><strong>Requirements:</strong> {{ item.required_stats }} </p>
-            <p><strong>Scaling:</strong> {{ item.scaling }} </p>
+            <p><strong>Scaling:</strong> {{ formatted_scaling }} </p>
             <p><strong>Attack Power:</strong> {{ item.attack_power }} </p>
             <p><strong>Defense:</strong> {{ item.defense }} </p>
             <p><strong>Spell Requirements:</strong> {{ item.spell_requirements }} </p>
@@ -86,4 +88,17 @@
         </div>
     </div>
 </body>
+
+
+
+<footer class="footer">
+    <div class="footer-content">
+         <p>&copy; 2025 EldenRingInsider. All rights reserved.</p>
+        <p>All in-game images and assets are property of FromSoftware Inc.</p>
+        <div class="footer-links">
+            <a href="{% url 'credits_page' %}">Credits</a>
+            <a href="{% url 'about_page' %}">About</a>
+        </div>
+    </div>
+</footer>
 </html>

@@ -560,7 +560,7 @@
 
         /* CSS for the floating chat bubble */
 .chat-container {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     width: 350px;
@@ -577,7 +577,7 @@
 
 /* Collapsed state */
 .chat-container.collapsed {
-    height: 50px; /* Only header is visible */
+    height: 60px; /* Only header is visible */
 }
 .chat-container.collapsed .chat-body,
 .chat-container.collapsed .chat-input {
@@ -615,6 +615,7 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background: #1e1e2e;
 }
 
 .message-bubble {
@@ -636,9 +637,10 @@
 
 /* Bot message */
 .bot-message {
-    background-color: #f1f1f1;
-    color: black;
+    background-color: #23232b;
+    color: white;
     align-self: flex-start;
+    border: 2px solid white;
     border-bottom-left-radius: 5px;
 }
 
@@ -663,8 +665,49 @@
 .chat-input button {
     padding: 10px 15px;
     border: none;
-    background-color: #2196F3;
-    color: white;
+    background-color: #1e1e2e;
+    color: #ffd700;
     border-radius: 20px;
     cursor: pointer;
+}
+
+
+/*    Footer    */
+.footer {
+    background-color: #29293a;
+    color: #f7d242;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-content p {
+    margin: 5px 0;
+}
+
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 20px;
+    display: flex;
+    justify-content: center; /* Centers the links horizontally */
+    gap: 40px; /* Creates space between the links */
+}
+
+
+.footer-links a {
+    color: #f7d242;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
 }

@@ -658,11 +658,11 @@ async function saveAsPreset() {
 <!-- Chatbot -->
 <div id="chat-widget" class="chat-container">
     <div class="chat-header">
-        <h4>Elden Ring Chatbot</h4>
+        <h4>Elden Ring Chatbot BETA</h4>
         <div class="chat-toggle">−</div>
     </div>
     <div class="chat-body" id="chat-messages">
-        <div class="message-bubble bot-message">Hello, Tarnished. Ask me for a build or a weapon recommendation!</div>
+        <div class="message-bubble bot-message">Hello, Tarnished. Ask me for a build recommendation!</div>
     </div>
     <form id="chat-form" class="chat-input">
         {% csrf_token %}
@@ -762,4 +762,16 @@ async function saveAsPreset() {
 </script>
 
 </body>
+
+
+<footer class="footer">
+    <div class="footer-content">
+         <p>&copy; 2025 EldenRingInsider. All rights reserved.</p>
+        <p>All in-game images and assets are property of FromSoftware Inc.</p>
+        <div class="footer-links">
+            <a href="{% url 'credits_page' %}">Credits</a>
+            <a href="{% url 'about_page' %}">About</a>
+        </div>
+    </div>
+</footer>
 </html>

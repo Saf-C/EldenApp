@@ -37,6 +37,8 @@ urlpatterns = [
     path('clear_custom_build/', views.clear_custom_build, name='clear_custom_build'),
     path('items/<int:item_id>/json/', views.item_json_view, name='item_json'),
     path('', include('chatbot.urls')),
+    path('credits/', views.credits_view, name='credits_page'),
+    path('about/', views.about_view, name='about_page'),
 ]
 
 
