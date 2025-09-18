@@ -1,7 +1,10 @@
 <!-- EldenRingInsider/templates/item_list.html -->
 <!DOCTYPE html>
 <html lang="en">
-{% csrf_token %}
+<form>
+    {% csrf_token %}
+</form>
+
 {% load static %}
 <head>
     <meta charset="UTF-8">
@@ -21,11 +24,11 @@
     <div class="logo">EldenRingInsider</div>
     <ul class="nav-links">
         <li><a href="{% url 'item_list' %}">Items</a></li>
-        <li><a href="#">Katanas</a></li>
-        <li><a href="#">Swords</a></li>
-        <li><a href="#">Staffs</a></li>
-        <li><a href="#">Ash of War</a></li>
-        <li><a href="#">Spells</a></li>
+        <li><a href="{% url 'item_list' %}?type=katana">Katanas</a></li>
+        <li><a href="{% url 'item_list' %}?type=greatsword,straightsword,curved_sword">Swords</a></li>
+        <li><a href="{% url 'item_list' %}?type=staff,glintstone_staff,sacred_seal">Staffs</a></li>
+        <li><a href="{% url 'item_list' %}?type=ash_of_war">Ash of War</a></li>
+        <li><a href="{% url 'item_list' %}?type=spell,sorcery,incantation">Spells</a></li>
         <li><a href="{% url 'builds' %}">Builds</a></li>
 
     </ul>
@@ -88,7 +91,7 @@
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a class="page-link" href="?{{ query_string }}page={{ page_obj.previous_page_number }}">Previous</a>
                 </li>
             {% else %}
                 <li class="page-item disabled"><span class="page-link">Previous</span></li>
@@ -98,13 +101,13 @@
                 {% if page_obj.number == num %}
                     <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?{{ query_string }}page={{ num }}">{{ num }}</a></li>
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a>
+                    <a class="page-link" href="?{{ query_string }}page={{ page_obj.next_page_number }}">Next</a>
                 </li>
             {% else %}
                 <li class="page-item disabled"><span class="page-link">Next</span></li>

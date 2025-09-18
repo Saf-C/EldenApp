@@ -122,6 +122,7 @@ def talisman_has_effect(talisman, effect_names):
 # ------------------------------
 def item_list(request):
     query = request.GET.get('q', '')
+    item_type = request.GET.get('type', '')
     item_type_order = [
         'katana', 'great_katana', 'colossal_sword', 'colossal_weapon', 'curved_sword', 'straightsword', 'greatsword',
         'dagger', 'twinblade', 'axe', 'great_axe', 'hammer', 'great_hammer', 'flail', 'spear',
@@ -135,12 +136,17 @@ def item_list(request):
     ]
     type_index = {t: i for i, t in enumerate(item_type_order)}
 
+    items_qs = Item.objects.all()
+
     if query:
         items_qs = Item.objects.filter(
             Q(name__icontains=query) |
             Q(description__icontains=query) |
             Q(type__icontains=query)
         )
+    if item_type:
+        item_types_list = item_type.split(',')
+        items_qs = items_qs.filter(type__in=item_types_list)
     else:
         items_qs = Item.objects.all()
 
@@ -163,10 +169,17 @@ def item_list(request):
         if t not in grouped_items:
             grouped_items[t] = temp_grouped[t]
 
+    query_string = ''
+    if query:
+        query_string += f'q={query}&'
+    if item_type:
+        query_string += f'type={item_type}&'
+
     return render(request, 'item_list.html', {
         'grouped_items': grouped_items,
         'query': query,
         'page_obj': page_obj,
+        'query_string': query_string
     })
 
 
