@@ -23,7 +23,7 @@ COPY . .
 # Run your pre-deploy commands as part of the build
 # This guarantees they run and their output will be visible in the build logs
 RUN python manage.py migrate
-RUN python manage.py loaddata data/data.json
+RUN python manage.py loaddata data.json
 RUN python manage.py collectstatic --noinput
 
 # Expose the port your app runs on
