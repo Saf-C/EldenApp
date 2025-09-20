@@ -96,7 +96,7 @@ class Item(models.Model):
         return f"{self.get_type_display()}: {self.name}"
 
 class Build(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
     def __str__(self):
