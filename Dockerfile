@@ -1,4 +1,4 @@
-# Build stage
+# Use Python 3.12 slim image
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -15,10 +15,9 @@ RUN pip install -r requirements-prod.txt
 COPY . .
 
 RUN echo "Triggering build: $(date)"
-
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-# Run migrations + load data at runtime before starting server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py loaddata data.json && gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"]
+# Run migrations + (optionally loaddata) at runtime
+CMD ["sh", "-c", "python manage.py migrate && gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"]
