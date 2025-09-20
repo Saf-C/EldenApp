@@ -63,7 +63,7 @@ class ItemType(models.TextChoices):
 
 class Item(models.Model):
     erdb_id = models.CharField(max_length=50, null=True, blank=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     type = models.CharField(max_length=32, choices=ItemType.choices, default=ItemType.OTHER)
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True, null=True)
