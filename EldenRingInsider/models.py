@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.postgres.indexes import GinIndex
 
 class ItemType(models.TextChoices):
-    # Weapon sub categorie
+    # Weapon sub categories
     # shield types
     SMALL_SHIELD = 'small_shield', 'Small Shield'
     MEDIUM_SHIELD = 'medium_shield', 'Medium Shield'
@@ -96,7 +96,7 @@ class Item(models.Model):
         return f"{self.get_type_display()}: {self.name}"
 
 class Build(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
