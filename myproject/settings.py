@@ -147,7 +147,7 @@ STATIC_ROOT = "/app/staticfiles"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    '/app/EldenRingInsider/static',
+    BASE_DIR / 'EldenRingInsider' / 'static',
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
