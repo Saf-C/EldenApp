@@ -29,8 +29,14 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default-key")
 
 DEBUG = os.environ.get("DJANGO_DEBUG","False")=="True"
 
+ALLOWED_HOSTS = [
+    host.strip().lower() for host in os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        "localhost,127.0.0.1,eldenringinsider.up.railway.app"
+    ).split(",")
+]
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
 
 
 
