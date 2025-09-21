@@ -587,7 +587,7 @@ async function selectItem(item) {
       slot: currentSlot,
       item_id: item.id
     }),
-    credentials: 'same-origin'
+    credentials: "include"
   });
   if (response.ok) {
     // Update the slot image and label immediately
@@ -639,7 +639,7 @@ async function saveAsPreset() {
       name: prompt('Enter a name for your preset:'),
       description: prompt('Enter a description (optional):') || '',
     }),
-    credentials: 'same-origin'
+    credentials: "include"
   });
   if (response.ok) {
     window.location.reload();
@@ -650,8 +650,10 @@ async function saveAsPreset() {
   const response = await fetch('/clear_custom_build/', {
     method: 'POST',
     headers: {
+       'Content-Type': 'application/json',
       'X-CSRFToken': getCookie('csrftoken'),
     },
+    credentials: "include",
   });
   if (response.ok) {
     window.location.reload();
@@ -731,7 +733,7 @@ async function saveAsPreset() {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({ message: query }),
-                credentials: 'same-origin'
+                credentials: "include"
             })
             .then(response => response.json())
             .then(data => {
