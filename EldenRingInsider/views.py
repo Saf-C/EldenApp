@@ -140,9 +140,9 @@ def item_list(request):
 
     if query:
         items_qs = Item.objects.filter(
-            Q(name__icontains=query) |
-            Q(description__icontains=query) |
-            Q(type__icontains=query)
+            Q(name__iexact=query) |
+            Q(name__istartswith=query) |
+            Q(description__icontains=query)
         )
     if item_type:
         item_types_list = item_type.split(',')
