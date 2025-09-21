@@ -145,7 +145,7 @@ def item_list(request):
             Q(type__icontains=query)
         )
     if item_type:
-        item_types_list = item_type.split(',').strip()
+        item_types_list = item_type.split(',')
         items_qs = items_qs.filter(type__in=item_types_list)
 
 
