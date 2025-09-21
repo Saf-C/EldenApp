@@ -196,7 +196,8 @@ async function suggestBuild() {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify(stats)
+        body: JSON.stringify(stats),
+        credentials: 'same-origin'
     });
     if (response.ok) {
         const data = await response.json();
@@ -585,7 +586,8 @@ async function selectItem(item) {
     body: JSON.stringify({
       slot: currentSlot,
       item_id: item.id
-    })
+    }),
+    credentials: 'same-origin'
   });
   if (response.ok) {
     // Update the slot image and label immediately
@@ -636,7 +638,8 @@ async function saveAsPreset() {
     body: JSON.stringify({
       name: prompt('Enter a name for your preset:'),
       description: prompt('Enter a description (optional):') || '',
-    })
+    }),
+    credentials: 'same-origin'
   });
   if (response.ok) {
     window.location.reload();
@@ -727,7 +730,8 @@ async function saveAsPreset() {
                     'X-CSRFToken': csrftoken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ message: query })
+                body: JSON.stringify({ message: query }),
+                credentials: 'same-origin'
             })
             .then(response => response.json())
             .then(data => {
