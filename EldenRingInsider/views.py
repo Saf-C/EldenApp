@@ -145,10 +145,9 @@ def item_list(request):
             Q(type__icontains=query)
         )
     if item_type:
-        item_types_list = item_type.split(',')
+        item_types_list = item_type.split(',').strip()
         items_qs = items_qs.filter(type__in=item_types_list)
-    else:
-        items_qs = Item.objects.all()
+
 
     items_list = list(items_qs)
     items_list.sort(key=lambda x: (type_index.get(x.type, len(item_type_order)), (x.name or "").lower()))
