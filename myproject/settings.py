@@ -125,6 +125,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://eldenringinsider.up.railway.app"
+]
 
 
 # Internationalization
