@@ -197,7 +197,6 @@ async function suggestBuild() {
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify(stats),
-        credentials: 'same-origin',
         credentials: "include"
     });
     if (response.ok) {
